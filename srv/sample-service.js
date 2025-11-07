@@ -1,4 +1,3 @@
-require('dotenv').config();
 const cds = require('@sap/cds');
 const crypto = require("crypto");
 const { SELECT } = cds;

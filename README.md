@@ -649,7 +649,7 @@ You must add that here and overwrite all the curly brackets at the end:
 
 13.	Create a new custom service entity in the Sales and Service Cloud V2 frontend, convert the CAP json file, download the final json definition 
 
-14. We skip this step, plesae download the provided Metadatafile. Normally you would need to edit the downloaded metadata file and make the following adjustments:
+14. Instead of adjusting the metadata we directly download it here: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json). Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon.
 -   Add a lable ```"label": "Samples",```
 -   Add a unique object type code ```"objectTypeCode": "CUS1329",```
 -   Remove the data formats from the ```"dataType": "BOOLEAN",```

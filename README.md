@@ -2,7 +2,7 @@
 
 This is a step by step instruction how to create an already more complete custom services including value selectors and a custom UI.
 
-📺**Video Tutorial**: You can either follow the steps below or watch the video (10 minutes) where I show each and every step needed in full detail.
+📺**Video Tutorial**: This video is based on a different custom object but it gives you in 10 minutes all the steps involved in creating your first custom service.
 
 -> [Video Tutorial - Custom Services](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_5r2suzns)
 
@@ -49,7 +49,7 @@ entity Samples : managed {
         @dataFormat: 'DATE'
         dueDate           : Date; // Due Date: Date
         overdueStatusIcon : String(255); // Overdue Status: String to hold emoticon
-        status            : StatusCodeType default 'Open'; // Status: Select List
+        status            : StatusCodeType default 'OPEN'; // Status: Select List
         // Only relevant if sampleType = withPackaging
         PackagingHeight   : Decimal(15, 2); // Packagin Height
         PackagingWidth    : Decimal(15, 2); // Packaging Width
@@ -93,22 +93,22 @@ entity Amount {
 // Enum types
 
 type StatusCodeType : String @assert.range enum {
-    ACTIVE    = 'Open';
-    INPROGRESS  = 'InProgress';
-    DELIVERED    = 'Delivered';
-    RETURNED  = 'Returned';
-    OVERDUE    = 'Overdue';
+    OPEN        = 'OPEN';
+    INPROGRESS  = 'INPROGRESS';  
+    DELIVERED   = 'DELIVERED';
+    RETURNED    = 'RETURNED';
+    OVERDUE     = 'OVERDUE';
 }
 
 type PackagingCodeType : String @assert.range enum {
-    PLASTIC    = 'Plastic';
-    METAL  = 'Metal';
-    OTHERMATERIAL    = 'OtherMaterial';
+    PLASTIC    = 'PLASTIC';
+    METAL  = 'METAL';
+    OTHERMATERIAL    = 'OTHERMATERIAL';
 }
 
 type SampleCodeType : String @assert.range enum {
-    WITHPACKAGING    = 'withPackaging';
-    WITHOUTPACKAGING  = 'withoutPackaging';
+    WITHPACKAGING    = 'WITHPACKAGING';
+    WITHOUTPACKAGING = 'WITHOUTPACKAGING';
 }
             
             
@@ -242,10 +242,6 @@ Snippet 5:
           "port": 4200
         },
         {
-          "host": "ns-staging.cxm-salescloud.com",
-          "protocol": "https"
-        },
-        {
           "host": "YOURTENANT.de1.demo.crm.cloud.sap",
           "protocol": "https"
         }
@@ -276,10 +272,11 @@ Snippet 5:
 
 -> Optional hint: Add 128M memory to all your services in ```mta.yaml``` to save some dev space
 
-7. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose and also includes some commented logic that we will enable in a later step.
+7. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose and also includes some commented logic that we will enable in a later step. I know that looks like a lot of code but it is easier than it looks...
 
 Snippet:
 ```
+require('dotenv').config();
 const cds = require('@sap/cds');
 const crypto = require("crypto");
 const { SELECT } = cds;
@@ -288,27 +285,38 @@ module.exports = cds.service.impl(async function () {
 
 const { Samples } = this.entities;
 
-    // Before Read to expand any sub structure like amounts
+ // Before Read to expand costOfSample and account safely
     this.before('READ', Samples, (req) => {
         const sel = req.query && req.query.SELECT;
         if (!sel) return; // nothing to change for non-SELECT requests
 
-        // ensure columns array exists and starts with all columns
-        if (!sel.columns || sel.columns.length === 0) sel.columns = [{ ref: ['*'] }];
-
+        // Avoid the problematic "*" expansion that causes PATCH errors
+        // Instead, be more specific about what we expand
         const ensureNavExpand = (nav) => {
+            if (!sel.columns) sel.columns = [];
+            
             const exists = sel.columns.some(col => {
                 return col && col.ref && Array.isArray(col.ref) && col.ref[0] === nav;
             });
-            if (!exists) sel.columns.push({ ref: [nav], expand: ['*'] });
+            if (!exists) {
+                sel.columns.push({ ref: [nav], expand: ['*'] });
+            }
         };
 
+        // Always ensure these specific expansions are available for after('READ') logic
         ensureNavExpand('costOfSample');
         ensureNavExpand('account');
         ensureNavExpand('product');
-
+        
+        // Only add the problematic "{ ref: ['*'] }" for external GET requests
+        if (req._ && req._.odataReq && req._.odataReq.method === 'GET') {
+            if (sel.columns.length === 3) { // Only our two expansions
+                sel.columns.unshift({ ref: ['*'] }); // Add * at the beginning
+            }
+        }
     });
 
+    
  // Get Product and Account details on the fly and add to response
     this.after('READ', 'Samples', async (Samples, req) => {
        console.log("After.Read for sample was started");
@@ -321,6 +329,7 @@ const { Samples } = this.entities;
 
         // Get Product details and add to response
         try {
+          /*
             const productApi = await cds.connect.to("Product.Service");
             const requestList = [];
 
@@ -356,7 +365,7 @@ const { Samples } = this.entities;
                     
                 }
             })
-
+*/
 
             // Get Account details and add to response
             const accountApi = await cds.connect.to("Account.Service");
@@ -641,7 +650,7 @@ You must add that here and overwrite all the curly brackets at the end:
 
 13.	Create a new custom service entity in the Sales and Service Cloud V2 frontend, convert the CAP json file, download the final json definition 
 
-13. Edit the downloaded metadata file and make the following adjustments:
+14. We skip this step, plesae download the provided Metadatafile. Normally you would need to edit the downloaded metadata file and make the following adjustments:
 -   Add a lable ```"label": "Samples",```
 -   Add a unique object type code ```"objectTypeCode": "CUS1329",```
 -   Remove the data formats from the ```"dataType": "BOOLEAN",```
@@ -653,13 +662,15 @@ You must add that here and overwrite all the curly brackets at the end:
     
 -   Check if all the enum values are generated correctly
 -   Add a notes entity and api
--   Add a timeline event
+-   Re-name the referenced entity in the generated event
 -   Remove the sample sub-structure in notes
 
-14. upload the adjusted metadata file in custom services
+15. upload the adjusted metadata file in custom services
     
-14.	Add UI’s to your custom service
+16.	Add UI’s to your custom service
     
-15.	Assign it to your user via a business role
+17.	Assign it to your user via a business role
     
-16.	Test!
+18.	Test!
+    
+19.	After this is working we can start to build the custom UI on top of our running backend service!

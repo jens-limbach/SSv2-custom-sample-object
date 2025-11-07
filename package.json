@@ -11,7 +11,6 @@
     "@sap-cloud-sdk/resilience": "^4.1.2",
     "@sap/cds": "^9",
     "@sap/xssec": "^4",
-    "dotenv": "^17.2.3",
     "express": "^4"
   },
   "engines": {
@@ -36,14 +35,16 @@
         "kind": "rest",
         "[production]": {
           "credentials": {
-            "destination": "Account-Service-Dest"
+            "url": "https://service7-staging.cxm-salescloud.com",
+            "username": "admin",
+            "password": "North$tar1"
           }
         },
         "[development]": {
           "credentials": {
             "url": "https://service7-staging.cxm-salescloud.com",
-            "username": "{{ACCOUNT_USERNAME}}",
-            "password": "{{ACCOUNT_PASSWORD}}"
+            "username": "admin",
+            "password": "North$tar1"
           }
         }
       },
@@ -51,14 +52,16 @@
         "kind": "rest",
         "[production]": {
           "credentials": {
-            "destination": "Product-Service-Dest"
+            "url": "https://service7-staging.cxm-salescloud.com",
+            "username": "admin",
+            "password": "North$tar1"
           }
         },
         "[development]": {
           "credentials": {
             "url": "https://service7-staging.cxm-salescloud.com",
-            "username": "{{PRODUCT_USERNAME}}",
-            "password": "{{PRODUCT_PASSWORD}}"
+            "username": "admin",
+            "password": "North$tar1"
           }
         }
       },
@@ -66,14 +69,16 @@
         "kind": "rest",
         "[production]": {
           "credentials": {
-            "destination": "Timeline-Service-Dest"
+            "url": "https://service7-staging.cxm-salescloud.com",
+            "username": "INBOUNDSAMPLE",
+            "password": "WelCome123!$%WeLcoMe1!123$%&/t"
           }
         },
         "[development]": {
           "credentials": {
             "url": "https://service7-staging.cxm-salescloud.com",
-            "username": "{{TIMELINE_USERNAME}}",
-            "password": "{{TIMELINE_PASSWORD}}"
+            "username": "INBOUNDSAMPLE",
+            "password": "WelCome123!$%WeLcoMe1!123$%&/t"
           }
         }
       }

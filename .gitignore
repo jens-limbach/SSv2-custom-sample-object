@@ -44,3 +44,4 @@ mta_archives/
 **/credentials.*
 **/secrets.*
 default-env.json
+package.json

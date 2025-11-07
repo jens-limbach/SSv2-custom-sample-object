@@ -1,0 +1,87 @@
+{
+  "name": "SampleJL",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js/hana": "^2",
+    "@sap-cloud-sdk/http-client": "^4.1.2",
+    "@sap-cloud-sdk/resilience": "^4.1.2",
+    "@sap/cds": "^9",
+    "@sap/xssec": "^4",
+    "express": "^4"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@cap-js/cds-types": "^0.13.0",
+    "@cap-js/sqlite": "^2",
+    "@sap/cds-dk": ">=8"
+  },
+  "scripts": {
+    "start": "cds-serve"
+  },
+  "cds": {
+    "requires": {
+      "[production]": {
+        "db": "hana",
+        "auth": "mocked"
+      },
+      "auth": "mocked",
+      "Account.Service": {
+        "kind": "rest",
+        "[production]": {
+          "credentials": {
+            "url": "https://service7-staging.cxm-salescloud.com",
+            "username": "admin",
+            "password": "North$tar1"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "url": "https://service7-staging.cxm-salescloud.com",
+            "username": "admin",
+            "password": "North$tar1"
+          }
+        }
+      },
+      "Product.Service": {
+        "kind": "rest",
+        "[production]": {
+          "credentials": {
+            "url": "https://service7-staging.cxm-salescloud.com",
+            "username": "admin",
+            "password": "North$tar1"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "url": "https://service7-staging.cxm-salescloud.com",
+            "username": "admin",
+            "password": "North$tar1"
+          }
+        }
+      },
+      "Timeline.Service": {
+        "kind": "rest",
+        "[production]": {
+          "credentials": {
+            "url": "https://service7-staging.cxm-salescloud.com",
+            "username": "INBOUNDSAMPLE",
+            "password": "WelCome123!$%WeLcoMe1!123$%&/t"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "url": "https://service7-staging.cxm-salescloud.com",
+            "username": "INBOUNDSAMPLE",
+            "password": "WelCome123!$%WeLcoMe1!123$%&/t"
+          }
+        }
+      }
+    }
+  }
+}

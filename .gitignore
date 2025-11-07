@@ -32,3 +32,15 @@ mta_archives/
 
 # @cap-js/cds-typer
 @cds-models
+
+# Environment variables and credentials
+.env
+.env.local
+.env.*.local
+*.env
+.cdsrc-private.json
+
+# Sensitive configuration
+**/credentials.*
+**/secrets.*
+default-env.json

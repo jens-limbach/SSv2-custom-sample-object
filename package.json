@@ -35,16 +35,14 @@
         "kind": "rest",
         "[production]": {
           "credentials": {
-            "url": "https://service7-staging.cxm-salescloud.com",
-            "username": "admin",
-            "password": "North$tar1"
+            "destination": "Account-Service-Dest"
           }
         },
         "[development]": {
           "credentials": {
             "url": "https://service7-staging.cxm-salescloud.com",
-            "username": "admin",
-            "password": "North$tar1"
+            "username": "{{ACCOUNT_USERNAME}}",
+            "password": "{{ACCOUNT_PASSWORD}}"
           }
         }
       },
@@ -52,16 +50,14 @@
         "kind": "rest",
         "[production]": {
           "credentials": {
-            "url": "https://service7-staging.cxm-salescloud.com",
-            "username": "admin",
-            "password": "North$tar1"
+            "destination": "Product-Service-Dest"
           }
         },
         "[development]": {
           "credentials": {
             "url": "https://service7-staging.cxm-salescloud.com",
-            "username": "admin",
-            "password": "North$tar1"
+            "username": "{{PRODUCT_USERNAME}}",
+            "password": "{{PRODUCT_PASSWORD}}"
           }
         }
       },
@@ -69,16 +65,14 @@
         "kind": "rest",
         "[production]": {
           "credentials": {
-            "url": "https://service7-staging.cxm-salescloud.com",
-            "username": "INBOUNDSAMPLE",
-            "password": "WelCome123!$%WeLcoMe1!123$%&/t"
+            "destination": "Timeline-Service-Dest"
           }
         },
         "[development]": {
           "credentials": {
             "url": "https://service7-staging.cxm-salescloud.com",
-            "username": "INBOUNDSAMPLE",
-            "password": "WelCome123!$%WeLcoMe1!123$%&/t"
+            "username": "{{TIMELINE_USERNAME}}",
+            "password": "{{TIMELINE_PASSWORD}}"
           }
         }
       }

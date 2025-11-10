@@ -2,13 +2,13 @@
 
 This is a step by step instruction how to create an already more complete custom services including value selectors and a custom UI.
 
-📺**Video Tutorial**: This video is based on a different custom object but it gives you in 10 minutes all the steps involved in creating your first custom service.
+📺**Video Tutorial**: This video is based on a different custom object but it gives you all the steps you need to do.
 
 -> [Video Tutorial - Custom Services](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_5r2suzns)
 
 The above video shows very nice all the detailed steps including both the CAP and also the Sales and Service V2 custom services part.
 
-If you want to see less CAP Development and more on how it looks later for the end-user I can recommend you to watch this more high level [overview video](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_zptgr1j5).
+If you want to see less CAP Development and more on how it looks later for the end-user I can recommend you to watch this more high level [overview video](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_zptgr1j5) for custom services.
 
 *PS: If you are also interessted in some very basics about extensibility you can also check out my [main page](https://github.com/jens-limbach/SSv2-extensibility-workshop/tree/main) with a guide on mashups and custom code in a cloud function.*
 
@@ -717,10 +717,11 @@ Now after this we have some additional steps to further enhance your custom serv
 Planned Todo's for this Tutorial:
 - End to End Video
 - Finalize the timeline feature
-- Finalize the "perfect" schema
+- Finalize the "perfect" schema (i.e. rework the associations)
 - Review all the nodeJS code
 - Add the related entity and document flow topics
 - Add a service for "custom KPI's"
 - Add example for multiple error messages including warnings and info messages
 - Add an example of a custom UI to this tutorial
 - Add more explanations around the connections in package.json and the cloud sdk
+- Add code example with decreased memory size (instead only mentioning it)

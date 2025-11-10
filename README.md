@@ -10,7 +10,7 @@ The above video shows very nice all the detailed steps including both the CAP an
 
 If you want to see less CAP Development and more on how it looks later for the end-user I can recommend you to watch this more high level [overview video](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_zptgr1j5) for custom services.
 
-*PS: If you are also interessted in some very basics about extensibility you can also check out my [main page](https://github.com/jens-limbach/SSv2-extensibility-workshop/tree/main) with a guide on mashups and custom code in a cloud function.*
+*PS: If you are also interessted in some very basics about extensibility you can also check out my [main page](https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/main) with a guide on mashups and custom code in a cloud function.*
 
 **Pre-requisites:**
 
@@ -188,7 +188,7 @@ service SampleService @(path: '/sample-service') {
 
 -> Adjust the ```package.json``` (overwrite the cds section by changing auth to mocked and adding the hana db) -> Snippet 3
 
-<img src="https://github.com/jens-limbach/SSv2-extensibility-workshop/tree/2bafe55a3a0705af6d20373558da1dce293f782a/images/package-json.png">
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/package-json.png">
  
 Snippet 3:
 ```
@@ -205,7 +205,7 @@ Snippet 3:
 
 -> Adjust the ```app/router/xs-app.json``` by adding CORS exceptions (for your tenant) and adjust authMethod=none -> Snippet 4 and 5
 
-<img src="https://github.com/jens-limbach/SSv2-extensibility-workshop/tree/2bafe55a3a0705af6d20373558da1dce293f782a/images/xs-app-json.png">
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/xs-app-json.png">
  
 Snippet 4:
 ```
@@ -268,7 +268,7 @@ Snippet 5:
 
 -> Adapt the ```mta.yaml``` by changing the generated hana db name according to your own DB name (3 places in i.e. to “name: customservice-basic-db”) 
 
-<img src="https://github.com/jens-limbach/SSv2-extensibility-workshop/tree/2bafe55a3a0705af6d20373558da1dce293f782a/images/mta-yaml.png">
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/mta-yaml.png">
 
 -> In case your BTP subaccount has spaces in it’s name: adjust the ```xsappname: SampleJL``` in your ```mta.yaml``` by removing the generated placeholders for subaccount and space.
 

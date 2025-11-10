@@ -581,7 +581,7 @@ You must add that here and overwrite all the curly brackets at the end:
 
 13.	Create a new custom service entity in the Sales and Service Cloud V2 frontend, convert the CAP json file, download the final json definition 
 
-14. Instead of adjusting the metadata we directly download it here: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json). Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon.
+14. Instead of adjusting the metadata we directly download it here: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json). Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon as the CAP conversion is currently undergoing a huge improvement.
 -   Add a lable ```"label": "Samples",```
 -   Add a unique object type code ```"objectTypeCode": "CUS1329",```
 -   Remove the data formats from the ```"dataType": "BOOLEAN",```
@@ -594,7 +594,8 @@ You must add that here and overwrite all the curly brackets at the end:
 -   Check if all the enum values are generated correctly
 -   Add a notes entity and api
 -   Re-name the referenced entity in the generated event
--   Remove the sample sub-structure in notes
+-   Remove the generated sample sub-structure in notes
+-   Map all value selectors correctly
 
 15. upload the adjusted metadata file in custom services
     
@@ -606,7 +607,57 @@ You must add that here and overwrite all the curly brackets at the end:
     
 19.	After this is working we can start to build the custom UI on top of our running backend service!
 
-20. Bonus: Enable the timeline feature. There several configuratoin steps involved which your "trainer" will show you. After that add the below code to your service. Note: This code still must be reviewed.
+Now after this we have some additional steps to further enhance your custom service.
+
+20. Validation: Let's add a simple validation to the sample request on create. We want to check that the "number of samples" cannot be 0.
+```
+// Validate before CREATE (only for root Samples entity)
+  this.before('CREATE', Samples, (req) => {
+    // ensure this runs only for the Samples root entity
+    if (req.target !== Samples) return;
+
+    const d = req.data || {};
+
+    if (d.numberOfSamples != null && d.numberOfSamples <= 0) {
+      return req.reject(400, 'Number of Samples must be greater than zero');
+    }
+   
+    });
+
+```
+
+21. Determination: Let's also add a simple determination during every update which is appending a red dot at the sample name if the sample is overdue and also sets the status from open to overdue.
+```
+// Validate before UPDATE (only for root Samples entity)
+  this.before('UPDATE', Samples, async (req) => {
+    if (req.target !== Samples) return;
+
+    const d = req.data || {};
+
+    
+    // Append "X" to sampleName if dueDate is provided and later than today.
+    // If dueDate is not later than today remove trailing "X".
+    // (Only modifies sampleName when sampleName is part of the request.)
+    if (d.dueDate && d.sampleName) {
+      const due = new Date(d.dueDate);
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      due.setHours(0,0,0,0);
+      if (due < today && !d.sampleName.endsWith(' 🔴')) {
+        d.sampleName = `${d.sampleName} 🔴`;
+        if (d.status === 'Open') {
+          d.status = 'Overdue';
+        }
+      } else if (due >= today && d.sampleName.endsWith(' 🔴')) {
+        d.sampleName = d.sampleName.slice(0, -2);
+      }
+    }
+
+  });
+
+```
+
+22. Bonus: Enable the timeline feature. There several configuratoin steps involved which your "trainer" will show you. After that add the below code to your service. Note: This code still must be reviewed.
 
 ```
 // After create: send REST call to create a new timeline entry
@@ -662,3 +713,14 @@ You must add that here and overwrite all the curly brackets at the end:
     
   });
 ```
+
+Planned Todo's for this Tutorial:
+- End to End Video
+- Finalize the timeline feature
+- Finalize the "perfect" schema
+- Review all the nodeJS code
+- Add the related entity and document flow topics
+- Add a service for "custom KPI's"
+- Add example for multiple error messages including warnings and info messages
+- Add an example of a custom UI to this tutorial
+- Add more explanations around the connections in package.json and the cloud sdk

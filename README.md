@@ -20,6 +20,8 @@ If you want to see less CAP Development and more on how it looks later for the e
 - You have enabled the Custom Services feature for creating new entities in your SAP Sales and Service Cloud V2
 - You are a little bit familiar with coding or curious enough to get into it :)
 
+Hint: We will be using SAP CAP (Cloud Application Programming Model) for our backend, you can read more about it here: <a href="https://cap.cloud.sap/docs/get-started//" target="_blank">CAP Documentation</a>
+
 **Step by Step Guide:**
 
 Important: If you try this out with several colleagues on the same BTP, please make sure you replace the suffix "JL" with your initials to make it unique.

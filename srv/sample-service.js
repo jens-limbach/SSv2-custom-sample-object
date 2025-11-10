@@ -211,4 +211,61 @@ const { Samples } = this.entities;
    })
 
 
+/*
+  // After create: send REST call to create a new timeline entry
+  this.after('CREATE', Samples, async (sample, req) => {
+    console.log("After create logic started");
+
+    if (req.target !== Samples) return sample;
+
+    try {
+      const timelineApi = await cds.connect.to("Timeline.Service");
+
+      // generate event id and current time
+      const eventId = crypto.randomUUID();
+      const eventTime = new Date().toISOString();
+
+      // determine account id from sample (try several possible fields)
+      const accountId = sample.account.accountID;
+
+      const payload = {
+        id: eventId,
+        subject: sample.ID,                                  // subject equals the sample ID
+        type: "customer.ssc.samplefinalservice.event.SampleCreate",
+        specversion: "0.2",
+        source: "614cd785fe86ec5c905b4a00",
+        time: eventTime,
+        datacontenttype: "application/json",
+        data: {
+          currentImage: {
+            ID: sample.ID,
+            name: sample.sampleName,
+            status: sample.status,
+            account: {
+              id: accountId
+            }
+          }
+        }
+      };
+
+      const resp = await timelineApi.send({
+        method: "POST",
+        path: "/sap/c4c/api/v1/inbound-data-connector-service/events",
+        headers: { "Content-Type": "application/json" },
+        data: payload
+      });
+
+      console.log(`[Timeline] posted event ${eventId} for sample ${sample.ID} - status=${resp && resp.status ? resp.status : 'unknown'}`);
+    } catch (err) {
+      console.error('[Timeline] failed to post event for sample', sample && sample.ID, err && (err.stack || err.message || err));
+      // do not reject the original create - just log the error
+    }
+
+    return sample;
+    
+  });
+*/
+
+
+
 });

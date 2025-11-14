@@ -605,6 +605,11 @@ You must add that here and overwrite all the curly brackets at the end:
 -   Add a notes entity and api (if not generated automatically)
 -   Remove the generated sample sub-structure in notes (which is currently generated because of the "back referencing")
 -   Map all value selectors correctly
+-   Adjust the currency code to the V2 services
+```"targetAttribute": "code",
+    "targetEntity": "sap.ssc.i18nservice.entity.currency",
+    "targetService": "sap.ssc.service.i18nService"
+```
 
 15. upload the adjusted metadata file in custom services
     

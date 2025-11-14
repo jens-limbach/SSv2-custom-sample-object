@@ -266,13 +266,20 @@ Snippet 5:
   ]
 ```
 
--> Adapt the ```mta.yaml``` by changing the generated hana db name according to your own DB name (3 places in i.e. to “name: customservice-basic-db”) 
+-> Adapt the ```mta.yaml``` by changing the generated hana db name according to your own DB name (3 places in i.e. to “name: customservice-basic-db”) and also add in each parameters section a limitation for the reservered memory and disk space (this will help to not rapidly block your dev space).
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/mta-yaml.png">
 
 -> In case your BTP subaccount has spaces in it’s name: adjust the ```xsappname: SampleJL``` in your ```mta.yaml``` by removing the generated placeholders for subaccount and space.
 
--> Optional hint: Add 128M memory to all your services in ```mta.yaml``` to save some dev space
+-> Add 256M memory to all your services in ```mta.yaml``` to save some dev space
+```
+      disk-quota: 256M
+      memory: 256M
+```
+
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/ReduceMemory.png">
+
 
 7. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose.
 

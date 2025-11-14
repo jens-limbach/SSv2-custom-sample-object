@@ -730,6 +730,7 @@ Now after this we have some additional steps to further enhance your custom serv
 
 Planned Todo's for this Tutorial:
 - End to End Video
+- add npm update in the beginning following an npm watch to show how easy you can test your backend locally
 - Finalize the timeline feature
 - Finalize the "perfect" schema (i.e. rework the associations)
 - Review all the nodeJS code

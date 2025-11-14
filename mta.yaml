@@ -17,6 +17,8 @@ modules:
     parameters:
       instances: 1
       buildpack: nodejs_buildpack
+      disk-quota: 256M
+      memory: 256M
     build-parameters:
       builder: npm-ci
     provides:
@@ -32,6 +34,8 @@ modules:
     path: gen/db
     parameters:
       buildpack: nodejs_buildpack
+      disk-quota: 256M
+      memory: 256M
     requires:
       - name: customservice-db3
 

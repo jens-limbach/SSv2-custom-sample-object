@@ -590,20 +590,20 @@ You must add that here and overwrite all the curly brackets at the end:
 
 13.	Create a new custom service entity in the Sales and Service Cloud V2 frontend, convert the CAP json file, download the final json definition 
 
-14. Instead of adjusting the metadata we directly download it here: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json). Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon as the CAP conversion is currently undergoing a huge improvement.
--   Add a lable ```"label": "Samples",```
--   Add a unique object type code ```"objectTypeCode": "CUS1329",```
--   Remove the data formats from the ```"dataType": "BOOLEAN",```
--   Add in the notes sections the additional itemDataType
+14. Instead of adjusting the metadata we directly download it here: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json). Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon as the CAP conversion is currently undergoing a huge improvement. Here are some improvements that might be necessary.
+-   Add a unique object type code ```"objectTypeCode": "CUS1329",``` on your entity level
+-   If you cannot "edit" your objects, the attribute ```"description": true,``` might be missing on your "sampleName" field
+-   If you cannot see your object in the timeline configuration, check if there is a label on the top entity level ```"label": "Samples",```
+-   Also for the timeline makes sure there is an event defined and it has the correct entity reference ```"entityReference": "Samples",```
+-   If you have boolean values you must remove the the data formats from the ```"dataType": "BOOLEAN",```
+-   Add in the notes sections you must remove the additional "itemDataType"
 ```
 "dataType": "ARRAY",
 "itemDataType": "OBJECT",
 ```
-    
 -   Check if all the enum values are generated correctly
--   Add a notes entity and api
--   Re-name the referenced entity in the generated event
--   Remove the generated sample sub-structure in notes
+-   Add a notes entity and api (if not generated automatically)
+-   Remove the generated sample sub-structure in notes (which is currently generated because of the "back referencing")
 -   Map all value selectors correctly
 
 15. upload the adjusted metadata file in custom services

@@ -278,7 +278,7 @@ Snippet 5:
       memory: 256M
 ```
 
-<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/ReduceMemory.png">
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/66fec41aff37011bd395f9b8e591f4cd2178e029/images/ReduceMemory.png">
 
 
 7. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose.

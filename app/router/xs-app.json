@@ -54,6 +54,10 @@
         {
           "host": "my1002000.de1.test.crm.cloud.sap",
           "protocol": "https"
+        },
+        {
+          "host": "my1000322.de1.demo.crm.cloud.sap",
+          "protocol": "https"
         }
       ],
       "allowedHeaders": [

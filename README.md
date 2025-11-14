@@ -733,4 +733,3 @@ Planned Todo's for this Tutorial:
 - Add example for multiple error messages including warnings and info messages
 - Add an example of a custom UI to this tutorial
 - Add more explanations around the connections in package.json and the cloud sdk
-- Add code example with decreased memory size (instead only mentioning it)

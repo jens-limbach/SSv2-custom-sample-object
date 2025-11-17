@@ -664,7 +664,7 @@ Now after this we have some additional steps to further enhance your custom serv
 
 ```
 
-24. Determination: Let's also add a simple determination during every create which is appending a red dot at the sample name if the sample is overdue and also sets the status from open to overdue in case it was wrongly maintained as open. (this logic would better be also happening during every update)
+24. Determination: Let's also add a simple determination during every create which is appending a red dot at the sample name if the sample is overdue. (this logic would better be also happening during every update)
 ```
     // Append "X" to sampleName if dueDate is provided and later than today.
     // If dueDate is not later than today remove trailing "X".

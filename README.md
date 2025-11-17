@@ -289,7 +289,8 @@ Snippet 5:
 ```cds watch```
 
 - Now follow the given links to and try to access your backend via a "GET" and a "POST" request:
-http://localhost:4004/sample-service/Sample
+
+[GET request to local](http://localhost:4004/sample-service/Sample)
 
 7. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose.
 

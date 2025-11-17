@@ -174,6 +174,19 @@ service SampleService @(path: '/sample-service') {
 }
 ```
 
+6. We are done now creating our model and our service. Before we continue to add some business logic, let us test our backend locally.
+
+- First make sure all packages are up to date using the command:
+```npm update --package-lock-only```
+
+- Then start your web server locally:
+```cds watch```
+
+- Now follow the given links to and try to access your backend via a "GET" and a "POST" request:
+
+<a href="http://localhost:4004/sample-service/Sample" target="_blank">http://localhost:4004/sample-service/Sample</a>
+
+
 6.	Enter in the terminal to add some additional features to our project:
    
 ```cds add hana```
@@ -280,17 +293,6 @@ Snippet 5:
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/66fec41aff37011bd395f9b8e591f4cd2178e029/images/ReduceMemory.png">
 
-7. We are done now creating our model, our service and the link to our database. Before we continue to add some business logic, let us test our application.
-
-- First make sure all packages are up to date using the command:
-```npm update --package-lock-only```
-
-- Then start your web server locally:
-```cds watch```
-
-- Now follow the given links to and try to access your backend via a "GET" and a "POST" request:
-
-<a href="http://localhost:4004/sample-service/Sample" target="_blank">http://localhost:4004/sample-service/Sample</a>
 
 7. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose.
 

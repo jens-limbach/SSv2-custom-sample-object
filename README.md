@@ -174,19 +174,6 @@ service SampleService @(path: '/sample-service') {
 }
 ```
 
-6. We are done now creating our model and our service. Before we continue to add some business logic, let us test our backend locally.
-
-- First make sure all packages are up to date using the command:
-```npm update --package-lock-only```
-
-- Then start your web server locally:
-```cds watch```
-
-- Now follow the given links to and try to access your backend via a "GET" and a "POST" request:
-
-<a href="http://localhost:4004/sample-service/Sample" target="_blank">http://localhost:4004/sample-service/Sample</a>
-
-
 6.	Enter in the terminal to add some additional features to our project:
    
 ```cds add hana```
@@ -197,7 +184,7 @@ service SampleService @(path: '/sample-service') {
 
 ```cds add approuter```
 
-9.	Adapt some files manually…
+7.	Adapt some files manually…
 
 -> Adjust the ```package.json``` (overwrite the cds section by changing auth to mocked and adding the hana db) -> Snippet 3
 
@@ -216,7 +203,31 @@ Snippet 3:
   }
 ```
 
--> Adjust the ```app/router/xs-app.json``` by adding CORS exceptions (for your tenant) and adjust authMethod=none -> Snippet 4 and 5
+8. Let's test it! We are done creating our model, our service, defining authentication and defining our database. Before we continue to make more adjustments and add some business logic, let us test our new backend locally.
+
+- First make sure all packages are up to date using the command:
+```npm update```
+
+- Then start your web server locally:
+```cds watch```
+
+- If you follow the given link in the terminal you will be re-directed to a website running locally. When you click on the service endpoint for the samples you will see the result of a GET request. Currently we have no data thats why it looks quite empty.
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/e44362235393c3c60460ee9e5d3f20be74af2cdc/images/cds%20server%20preview.png">
+
+If you want you can send with any tool as POST request to the same endpoint:
+<a href="http://localhost:4004/sample-service/Sample" target="_blank">http://localhost:4004/sample-service/Sample</a>
+
+You can use for the first test a very simple payload like:
+```
+{
+            "sampleName": "Postman Sample JL",
+            "hazardous": true,
+            "hazardousReason": "Some reason",
+            "numberOfSamples": 5
+}
+```
+
+9. We need to adjust a few more files. Adjust the ```app/router/xs-app.json``` by adding CORS exceptions (for your tenant) and adjust authMethod=none -> Snippet 4 and 5
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/xs-app-json.png">
  
@@ -279,7 +290,7 @@ Snippet 5:
   ]
 ```
 
--> Adapt the ```mta.yaml``` by changing the generated hana db name according to your own DB name (3 places in i.e. to “name: customservice-basic-db”) and also add in each parameters section a limitation for the reservered memory and disk space (this will help to not rapidly block your dev space).
+10. Adapt the ```mta.yaml``` by changing the generated hana db name according to your own DB name (3 places in i.e. to “name: customservice-basic-db”) and also add in each parameters section a limitation for the reservered memory and disk space (this will help to not rapidly block your dev space).
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/mta-yaml.png">
 
@@ -294,7 +305,7 @@ Snippet 5:
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/66fec41aff37011bd395f9b8e591f4cd2178e029/images/ReduceMemory.png">
 
 
-7. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose.
+11. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose.
 
 Snippet:
 ```
@@ -514,7 +525,7 @@ const { Samples } = this.entities;
 });
 ```
 
-8. Add to your ```package.json``` the below directly into the cds production section. We need to add some credentials. You need to replace your tenant and credentials in the below code. Normally you would use BTP destinations here but this way we "save" a step.
+12. Add to your ```package.json``` the below directly into the cds production section. We need to add some credentials. You need to replace your tenant and credentials in the below code. Normally you would use BTP destinations here but this way we "save" a step.
 
 After exactly the last curly bracket here:
 ```
@@ -585,7 +596,7 @@ You must add that here and overwrite all the curly brackets at the end:
 }
 ```
 
-8.	Enter in your terminal
+13.	Enter in your terminal
 
 ```npm install @sap-cloud-sdk/http-client @sap-cloud-sdk/resilience -save```
 
@@ -597,13 +608,13 @@ You must add that here and overwrite all the curly brackets at the end:
 
 ```cf deploy mta_file```
 
-10.	Copy the app router url and try out your backend service.
+14.	Copy the app router url and try out your backend service.
     
-12.	Enter in the terminal ```cds -2 json .\srv\Sample-service.cds > BackendService.json``` and copy the json into a new file.
+15.	Enter in the terminal ```cds -2 json .\srv\Sample-service.cds > BackendService.json``` and copy the json into a new file.
 
-13.	Create a new custom service entity in the Sales and Service Cloud V2 frontend, convert the CAP json file, download the final json definition 
+16.	Create a new custom service entity in the Sales and Service Cloud V2 frontend, convert the CAP json file, download the final json definition 
 
-14. Instead of adjusting the metadata we directly download it here: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json). Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon as the CAP conversion is currently undergoing a huge improvement. Here are some improvements that might be necessary.
+17. Instead of adjusting the metadata we directly download it here: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json). Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon as the CAP conversion is currently undergoing a huge improvement. Here are some improvements that might be necessary.
 -   Add a unique object type code ```"objectTypeCode": "CUS1329",``` on your entity level
 -   If you cannot "edit" your objects, the attribute ```"description": true,``` might be missing on your "sampleName" field
 -   If you cannot see your object in the timeline configuration, check if there is a label on the top entity level ```"label": "Samples",```
@@ -624,19 +635,19 @@ You must add that here and overwrite all the curly brackets at the end:
     "targetService": "sap.ssc.service.i18nService"
 ```
 
-15. upload the adjusted metadata file in custom services
+18. Upload the adjusted metadata file in custom services
     
-16.	Add UI’s to your custom service
+19.	Add UI’s to your custom service and add your deployed backend as the Host
     
-17.	Assign it to your user via a business role
+20.	Assign it to your user via a business role
     
-18.	Test!
+21.	Test!
     
-19.	After this is working we can start to build the custom UI on top of our running backend service!
+22.	After this is working we can start to build the custom UI on top of our running backend service!
 
 Now after this we have some additional steps to further enhance your custom service.
 
-20. Validation: Let's add a simple validation to the sample request on create. We want to check that the "number of samples" cannot be 0.
+23. Validation: Let's add a simple validation to the sample request on create. We want to check that the "number of samples" cannot be 0.
 ```
 // Validate before CREATE (only for root Samples entity)
   this.before('CREATE', Samples, (req) => {
@@ -653,7 +664,7 @@ Now after this we have some additional steps to further enhance your custom serv
 
 ```
 
-21. Determination: Let's also add a simple determination during every update which is appending a red dot at the sample name if the sample is overdue and also sets the status from open to overdue.
+24. Determination: Let's also add a simple determination during every update which is appending a red dot at the sample name if the sample is overdue and also sets the status from open to overdue.
 ```
 // Validate before UPDATE (only for root Samples entity)
   this.before('UPDATE', Samples, async (req) => {
@@ -684,7 +695,7 @@ Now after this we have some additional steps to further enhance your custom serv
 
 ```
 
-22. Bonus: Enable the timeline feature. There several configuratoin steps involved which your "trainer" will show you. After that add the below code to your service. Note: This code still must be reviewed.
+25. Bonus: Enable the timeline feature. There several configuratoin steps involved which your "trainer" will show you. After that add the below code to your service. Note: This code still must be reviewed.
 
 ```
 // After create: send REST call to create a new timeline entry

@@ -730,12 +730,13 @@ Now after this we have some additional steps to further enhance your custom serv
 
 Planned Todo's for this Tutorial:
 - End to End Video
-- add npm update in the beginning following an npm watch to show how easy you can test your backend locally
+- add npm update in the beginning following an cds watch to show how easy you can test your backend locally
 - Finalize the timeline feature
 - Finalize the "perfect" schema (i.e. rework the associations)
 - Review all the nodeJS code
 - Add the related entity and document flow topics
-- Add a service for "custom KPI's"
+- Add a service for "custom key metrics"
 - Add example for multiple error messages including warnings and info messages
 - Add an example of a custom UI to this tutorial
 - Add more explanations around the connections in package.json and the cloud sdk
+- Link documentation (custom services, metadata guidelines etc.)

@@ -266,6 +266,36 @@ const { Samples } = this.entities;
   });
 */
 
+// Validate before CREATE (only for root Samples entity)
+  this.before('CREATE', Samples, (req) => {
+    // ensure this runs only for the Samples root entity
+    if (req.target !== Samples) return;
 
+    const d = req.data || {};
+
+    if (d.numberOfSamples != null && d.numberOfSamples <= 0) {
+      return req.reject(400, 'Number of Samples must be greater than zero');
+    }
+   
+
+        // Append "X" to sampleName if dueDate is provided and later than today.
+    // If dueDate is not later than today remove trailing "X".
+    // (Only modifies sampleName when sampleName is part of the request.)
+    if (d.dueDate && d.sampleName) {
+      const due = new Date(d.dueDate);
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      due.setHours(0,0,0,0);
+      if (due < today && !d.sampleName.endsWith(' 🔴')) {
+        d.sampleName = `${d.sampleName} 🔴`;
+        if (d.status === 'Open') {
+          d.status = 'Overdue';
+        }
+      } else if (due >= today && d.sampleName.endsWith(' 🔴')) {
+        d.sampleName = d.sampleName.slice(0, -2);
+      }
+    }
+
+    });
 
 });

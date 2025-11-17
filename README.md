@@ -664,15 +664,8 @@ Now after this we have some additional steps to further enhance your custom serv
 
 ```
 
-24. Determination: Let's also add a simple determination during every update which is appending a red dot at the sample name if the sample is overdue and also sets the status from open to overdue.
+24. Determination: Let's also add a simple determination during every create which is appending a red dot at the sample name if the sample is overdue and also sets the status from open to overdue in case it was wrongly maintained as open. (this logic would better be also happening during every update)
 ```
-// Validate before UPDATE (only for root Samples entity)
-  this.before('UPDATE', Samples, async (req) => {
-    if (req.target !== Samples) return;
-
-    const d = req.data || {};
-
-    
     // Append "X" to sampleName if dueDate is provided and later than today.
     // If dueDate is not later than today remove trailing "X".
     // (Only modifies sampleName when sampleName is part of the request.)
@@ -690,9 +683,6 @@ Now after this we have some additional steps to further enhance your custom serv
         d.sampleName = d.sampleName.slice(0, -2);
       }
     }
-
-  });
-
 ```
 
 25. Bonus: Enable the timeline feature. There several configuratoin steps involved which your "trainer" will show you. After that add the below code to your service. Note: This code still must be reviewed.

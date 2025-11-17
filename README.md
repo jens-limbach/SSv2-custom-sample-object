@@ -290,7 +290,7 @@ Snippet 5:
 
 - Now follow the given links to and try to access your backend via a "GET" and a "POST" request:
 
-[GET request to local](http://localhost:4004/sample-service/Sample)
+<a href="http://localhost:4004/sample-service/Sample" target="_blank">http://localhost:4004/sample-service/Sample</a>
 
 7. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose.
 

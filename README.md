@@ -10,7 +10,7 @@ The above video shows very nice all the detailed steps including both the CAP an
 
 If you want to see less CAP Development and more on how it looks later for the end-user I can recommend you to watch this more high level [overview video](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_zptgr1j5) for custom services.
 
-*PS: If you are also interessted in some very basics about extensibility you can also check out my [main page](https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/main) with a guide on mashups and custom code in a cloud function.*
+*PS: If you are also interessted in some very basics about extensibility you can also check out my [main page](https://github.com/jens-limbach/SSv2-extensibility-workshop) with a guide on mashups and custom code in a cloud function.*
 
 **Pre-requisites:**
 
@@ -20,7 +20,7 @@ If you want to see less CAP Development and more on how it looks later for the e
 - You have enabled the Custom Services feature for creating new entities in your SAP Sales and Service Cloud V2
 - You are a little bit familiar with coding or curious enough to get into it :)
 
-Hint: We will be using SAP CAP (Cloud Application Programming Model) for our backend, you can read more about it here: <a href="https://cap.cloud.sap/docs/get-started//" target="_blank">CAP Documentation</a>
+Hint: We will be using SAP CAP (Cloud Application Programming Model) for our backend, you can read more about it here: <a href="https://cap.cloud.sap/docs/get-started/" target="_blank">CAP Documentation</a>
 
 **Step by Step Guide:**
 

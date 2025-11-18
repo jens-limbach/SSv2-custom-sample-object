@@ -288,9 +288,6 @@ const { Samples } = this.entities;
       due.setHours(0,0,0,0);
       if (due < today && !d.sampleName.endsWith(' 🔴')) {
         d.sampleName = `${d.sampleName} 🔴`;
-        if (d.status === 'Open') {
-          d.status = 'Overdue';
-        }
       } else if (due >= today && d.sampleName.endsWith(' 🔴')) {
         d.sampleName = d.sampleName.slice(0, -2);
       }

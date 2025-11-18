@@ -1,12 +1,12 @@
 # Custom Services - Step by Step
 
-This is a step by step instruction how to create an already more complete custom services including value selectors and a custom UI.
+This is a step by step instruction how to create a complete custom services including value selectors and a custom UI.
 
-📺**Video Tutorial**: This video is based on a different custom object but it gives you all the steps you need to do.
+📺**Video Tutorial**:  You can either follow the steps below or watch the video (18 minutes). 
 
 -> [Video Tutorial - Custom Services](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_5r2suzns)
 
-The above video shows very nice all the detailed steps including both the CAP and also the Sales and Service V2 custom services part.
+The above video shows very nice all the detailed steps including both the CAP and also the Sales and Service V2 custom services part. This is especially useful for the last configuration steps in the SAP Sales and Service Cloud which are more detailed in the video than elaborated below. 
 
 If you want to see less CAP Development and more on how it looks later for the end-user I can recommend you to watch this more high level [overview video](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_zptgr1j5) for custom services.
 

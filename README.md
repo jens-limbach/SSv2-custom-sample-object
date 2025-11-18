@@ -4,7 +4,7 @@ This is a step by step instruction how to create a complete custom services incl
 
 📺**Video Tutorial**:  You can either follow the steps below or watch the video (18 minutes). 
 
--> [Video Tutorial - Custom Services](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_5r2suzns)
+-> [Video Tutorial - Custom Services](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_gf894byk)
 
 The above video shows very nice all the detailed steps including both the CAP and also the Sales and Service V2 custom services part. This is especially useful for the last configuration steps in the SAP Sales and Service Cloud which are more detailed in the video than elaborated below. 
 

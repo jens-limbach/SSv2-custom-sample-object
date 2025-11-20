@@ -2,7 +2,7 @@ namespace sap.capire.customservice;
 
 using {managed} from '@sap/cds/common';
 
-@isRoot
+@isRootEntity : true
 entity Sample : managed {
     key ID                : UUID;
 

@@ -11,6 +11,7 @@
       "title": "Samples",
       "entityType": "BUSINESS",
       "objectTypeCode": "CUS8735",
+      "label": "Sample",
       "root": true,
       "creatable": false,
       "updatable": false,

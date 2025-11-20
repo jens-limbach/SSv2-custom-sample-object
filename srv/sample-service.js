@@ -4,10 +4,10 @@ const { SELECT } = cds;
 
 module.exports = cds.service.impl(async function () {
 
-const { Samples } = this.entities;
+    const { Samples } = this.entities;  // ✅ Changed: Sample → Samples
 
- // Before Read to expand costOfSample and account safely
-    this.before('READ', Samples, (req) => {
+    // Before Read to expand costOfSample and account safely
+    this.before('READ', Samples, (req) => { 
         const sel = req.query && req.query.SELECT;
         if (!sel) return; // nothing to change for non-SELECT requests
 
@@ -16,13 +16,12 @@ const { Samples } = this.entities;
         // Initialize columns if not present
         if (!sel.columns) sel.columns = [];
 
-        // Add scalar fields for both GET and PATCH operations
+        
         const scalarFields = [
-            'ID', 
-            'sampleName', 'sampleType', 'numberOfSamples', 'shipToAddress',
+            'ID', 'createdAt', 'createdBy', 'modifiedAt', 'modifiedBy',
+            'sampleName', 'sampleType', 'shipToAddress',
             'hazardous', 'hazardousReason', 'dueDate', 'overdueStatusIcon', 'status',
-            'PackagingHeight', 'PackagingWidth', 'PackagingMaterial',
-            'productUUID', 'accountUUID', 'employeeUUID', 'opportunityUUID', 'serviceCaseUUID'
+            'packagingHeight', 'packagingWidth', 'packagingMaterial'
         ];
 
         // Add scalar fields if they don't exist
@@ -47,13 +46,17 @@ const { Samples } = this.entities;
         // Always ensure these specific expansions are available for after('READ') logic
         ensureNavExpand('costOfSample');
         ensureNavExpand('account');
+        ensureNavExpand('numberOfSamples');
         ensureNavExpand('product');
+        ensureNavExpand('employee');
+        ensureNavExpand('opportunity');
+        ensureNavExpand('serviceCase');
 
         console.log('Columns after modification:', sel.columns.map(col => col.ref));
     });
 
     // After UPDATE (PATCH) - return complete entity with all fields
-    this.after('UPDATE', Samples, async (result, req) => {
+    this.after('UPDATE', Samples, async (result, req) => {  
         console.log('🔥 after(UPDATE) handler triggered!');
         
         if (!result || !result.ID) {
@@ -64,21 +67,22 @@ const { Samples } = this.entities;
         try {
             console.log('PATCH operation - fetching complete entity with all fields');
             
-            // Re-read the updated entity with all scalar fields and expansions
+            
             const completeEntity = await cds.run(
-                SELECT.from(Samples)
+                SELECT.from(Samples)  // ✅ Changed: Sample → Samples
                     .where({ ID: result.ID })
                     .columns([
-                        // All scalar fields explicitly
-                        'ID', 
-                        'sampleName', 'sampleType', 'numberOfSamples', 'shipToAddress',
+                        'ID', 'createdAt', 'createdBy', 'modifiedAt', 'modifiedBy',
+                        'sampleName', 'sampleType', 'shipToAddress',
                         'hazardous', 'hazardousReason', 'dueDate', 'overdueStatusIcon', 'status',
-                        'PackagingHeight', 'PackagingWidth', 'PackagingMaterial',
-                        'productUUID', 'accountUUID', 'employeeUUID', 'opportunityUUID', 'serviceCaseUUID',
-                        // Navigation expansions
+                        'packagingHeight', 'packagingWidth', 'packagingMaterial', 
                         { ref: ['costOfSample'], expand: ['*'] },
                         { ref: ['account'], expand: ['*'] },
-                        { ref: ['product'], expand: ['*'] }
+                        { ref: ['numberOfSamples'], expand: ['*'] },
+                        { ref: ['product'], expand: ['*'] },
+                        { ref: ['employee'], expand: ['*'] },
+                        { ref: ['opportunity'], expand: ['*'] },
+                        { ref: ['serviceCase'], expand: ['*'] }
                     ])
             );
 
@@ -116,27 +120,23 @@ const { Samples } = this.entities;
         return result;
     });
 
-    
- // After Read to enrich account and product details
-    this.after('READ', 'Samples', async (Samples, req) => {
-       console.log("After.Read for sample was started");
-
+    // After Read to enrich account and product details
+    this.after('READ', 'Samples', async (samples, req) => {  // ✅ Changed: 'Sample' → 'Samples'
+        console.log("After.Read for sample was started");
 
         // Skip if there are no samples
-        if (!Samples || Samples.length === 0) {
-            return Samples;
+        if (!samples || samples.length === 0) {  
+            return samples;
         }
 
-        // Enrich account and product details based on a V2 API call
+        // ... rest of your after('READ') logic stays the same
         try {
- 
-              // Get Account details and add to response
             const accountApi = await cds.connect.to("Account.Service");
             const requestList2 = [];
 
             // forming batch call
-            Samples?.forEach((sa, index) => {
-              if (!(sa.account && sa.account.accountID)) return;
+            samples?.forEach((sa, index) => {  
+                if (!(sa.account && sa.account.accountID)) return;
                 let accountCnsEndPoint = `/sap/c4c/api/v1/account-service/accounts/${sa.account.accountID}?$select=displayId,id,formattedName`;
                 requestList2.push({
                     "id": 'accountCns_' + index++,
@@ -144,6 +144,7 @@ const { Samples } = this.entities;
                     "method": "GET"
                 })
             });
+
             const accountDataBatchResp = await accountApi.send({
                 method: "POST",
                 path: `$batch`,
@@ -154,9 +155,10 @@ const { Samples } = this.entities;
                     "requests": requestList2
                 }
             });
+
             accountDataBatchResp.responses.forEach((eachAccDtl, index) => {
                 if (eachAccDtl?.body?.value) {
-                    Samples[index]['account'] = {
+                    samples[index]['account'] = { 
                         id: eachAccDtl.body.value.id,
                         name: eachAccDtl.body.value.formattedName,
                         displayId: eachAccDtl.body.value.displayId
@@ -165,134 +167,35 @@ const { Samples } = this.entities;
                 }
             })
 
-            /*
-            // Get Product details and add to response
-            const productApi = await cds.connect.to("Product.Service");
-            const requestList = [];
-
-            // forming batch call
-            Samples?.forEach((sa, index) => {
-              if (!(sa.product && sa.product.productID)) return;
-                console.log("Product ID: "+sa.product.productID);
-                let productCnsEndPoint = `/sap/c4c/api/v1/product-service/products/${sa.product.productID}?$select=displayId,id,name`;
-                requestList.push({
-                    "id": 'productCns_' + index++,
-                    "url": productCnsEndPoint,
-                    "method": "GET"
-                })
-            });
-            const productDataBatchResp = await productApi.send({
-                method: "POST",
-                path: `$batch`,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: {
-                    "requests": requestList
-                }
-            });
-            productDataBatchResp.responses.forEach((eachProdDtl, index) => {
-                if (eachProdDtl?.body?.value) {
-                    Samples[index]['product'] = {
-                        id: eachProdDtl.body.value.id,
-                        name: eachProdDtl.body.value.name,
-                        displayId: eachProdDtl.body.value.displayId
-
-                    };
-                    
-                }
-            })
-*/
-
-            return Samples;
+            return samples;  
         } catch (err) {
             return req.reject("Account and Product are mandatory. "+err);
         }    
-   })
+    });
 
+    // Validate before CREATE (only for root Sample entity)
+    this.before('CREATE', Samples, (req) => {  
+        // ensure this runs only for the Sample root entity
+        if (req.target !== Samples) return; 
 
-/*
-  // After create: send REST call to create a new timeline entry
-  this.after('CREATE', Samples, async (sample, req) => {
-    console.log("After create logic started");
+        const d = req.data || {};
 
-    if (req.target !== Samples) return sample;
-
-    try {
-      const timelineApi = await cds.connect.to("Timeline.Service");
-
-      // generate event id and current time
-      const eventId = crypto.randomUUID();
-      const eventTime = new Date().toISOString();
-
-      // determine account id from sample (try several possible fields)
-      const accountId = sample.account.accountID;
-
-      const payload = {
-        id: eventId,
-        subject: sample.ID,                                  // subject equals the sample ID
-        type: "customer.ssc.samplefinalservice.event.SampleCreate",
-        specversion: "0.2",
-        source: "614cd785fe86ec5c905b4a00",
-        time: eventTime,
-        datacontenttype: "application/json",
-        data: {
-          currentImage: {
-            ID: sample.ID,
-            name: sample.sampleName,
-            status: sample.status,
-            account: {
-              id: accountId
-            }
-          }
+        if (d.numberOfSamples?.content != null && d.numberOfSamples.content <= 0) {
+            return req.reject(400, 'Number of Samples must be greater than zero');
         }
-      };
 
-      const resp = await timelineApi.send({
-        method: "POST",
-        path: "/sap/c4c/api/v1/inbound-data-connector-service/events",
-        headers: { "Content-Type": "application/json" },
-        data: payload
-      });
-
-      console.log(`[Timeline] posted event ${eventId} for sample ${sample.ID} - status=${resp && resp.status ? resp.status : 'unknown'}`);
-    } catch (err) {
-      console.error('[Timeline] failed to post event for sample', sample && sample.ID, err && (err.stack || err.message || err));
-      // do not reject the original create - just log the error
-    }
-
-    return sample;
-    
-  });
-*/
-
-// Validate before CREATE (only for root Samples entity)
-  this.before('CREATE', Samples, (req) => {
-    // ensure this runs only for the Samples root entity
-    if (req.target !== Samples) return;
-
-    const d = req.data || {};
-
-    if (d.numberOfSamples != null && d.numberOfSamples <= 0) {
-      return req.reject(400, 'Number of Samples must be greater than zero');
-    }
-   
-
-        // Append "X" to sampleName if dueDate is provided and later than today.
-    // If dueDate is not later than today remove trailing "X".
-    // (Only modifies sampleName when sampleName is part of the request.)
-    if (d.dueDate && d.sampleName) {
-      const due = new Date(d.dueDate);
-      const today = new Date();
-      today.setHours(0,0,0,0);
-      due.setHours(0,0,0,0);
-      if (due < today && !d.sampleName.endsWith(' 🔴')) {
-        d.sampleName = `${d.sampleName} 🔴`;
-      } else if (due >= today && d.sampleName.endsWith(' 🔴')) {
-        d.sampleName = d.sampleName.slice(0, -2);
-      }
-    }
-
+        // ... rest of your validation logic stays the same
+        if (d.dueDate && d.sampleName) {
+            const due = new Date(d.dueDate);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            due.setHours(0,0,0,0);
+            if (due < today && !d.sampleName.endsWith(' 🔴')) {
+                d.sampleName = `${d.sampleName} 🔴`;
+            } else if (due >= today && d.sampleName.endsWith(' 🔴')) {
+                d.sampleName = d.sampleName.slice(0, -2);
+            }
+        }
     });
 
 });

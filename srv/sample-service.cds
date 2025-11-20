@@ -4,9 +4,12 @@ service SampleService @(path: '/sample-service') {
 
     // Projections so that we have those endpoints ready for our frontend application
     @odata.draft.bypass
-    entity Samples as projection on sampleschema.Samples excluding { createdAt, createdBy, modifiedBy };
-    entity Notes        as projection on sampleschema.Notes excluding { createdAt, createdBy, modifiedBy };
+    entity Samples as projection on sampleschema.Sample;
 
-    // Event for the Timeline Entry
-    event customer.ssc.sampleservice.event.SampleCreate {};
+    entity Notes   as projection on sampleschema.Note;
+
+    // Events for Timeline and Autoflow in SAP Sales and Service Cloud V2
+    event SampleCreated {};
+    event SampleUpdated {};
+    event SampleDeleted {};
 }

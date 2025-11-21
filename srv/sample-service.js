@@ -107,8 +107,11 @@ module.exports = cds.service.impl(async function () {
                             console.log("Account enrichment completed for PATCH response");
                         }
                     } catch (err) {
-                        console.log('Account enrichment failed in PATCH:', err.message);
+                        console.log('Account enrichment failed in PATCH (non-critical):', err.message);
+                        // Continue without enrichment - account stays as-is
                     }
+                } else {
+                    console.log('No accountID present, skipping account enrichment in PATCH');
                 }
                 
                 return entity;
@@ -129,21 +132,31 @@ module.exports = cds.service.impl(async function () {
             return samples;
         }
 
-        // ... rest of your after('READ') logic stays the same
         try {
             const accountApi = await cds.connect.to("Account.Service");
             const requestList2 = [];
+            const sampleIndexMap = []; // Track which samples have accounts
 
-            // forming batch call
+            // forming batch call - only for samples that have accountID
             samples?.forEach((sa, index) => {  
-                if (!(sa.account && sa.account.accountID)) return;
+                if (!(sa.account && sa.account.accountID)) {
+                    console.log(`Sample at index ${index} has no accountID, skipping enrichment`);
+                    return;
+                }
                 let accountCnsEndPoint = `/sap/c4c/api/v1/account-service/accounts/${sa.account.accountID}?$select=displayId,id,formattedName`;
                 requestList2.push({
-                    "id": 'accountCns_' + index++,
+                    "id": 'accountCns_' + requestList2.length,
                     "url": accountCnsEndPoint,
                     "method": "GET"
-                })
+                });
+                sampleIndexMap.push(index); // Store original sample index
             });
+
+            // If no accounts to enrich, return samples as-is
+            if (requestList2.length === 0) {
+                console.log("No accounts to enrich, returning samples as-is");
+                return samples;
+            }
 
             const accountDataBatchResp = await accountApi.send({
                 method: "POST",
@@ -156,20 +169,23 @@ module.exports = cds.service.impl(async function () {
                 }
             });
 
-            accountDataBatchResp.responses.forEach((eachAccDtl, index) => {
+            accountDataBatchResp.responses.forEach((eachAccDtl, batchIndex) => {
                 if (eachAccDtl?.body?.value) {
-                    samples[index]['account'] = { 
+                    const originalSampleIndex = sampleIndexMap[batchIndex];
+                    samples[originalSampleIndex]['account'] = { 
                         accountID: eachAccDtl.body.value.id,
                         name: eachAccDtl.body.value.formattedName,
                         displayId: eachAccDtl.body.value.displayId
                     };
                     console.log("Account response reached. Some values: "+eachAccDtl.body.value.displayId+" "+eachAccDtl.body.value.formattedName);
                 }
-            })
+            });
 
             return samples;  
         } catch (err) {
-            return req.reject("Account and Product are mandatory. "+err);
+            console.error("Error during account enrichment:", err);
+            // Don't reject - just log error and return samples without enrichment
+            return samples;
         }    
     });
 

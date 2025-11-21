@@ -636,7 +636,9 @@ You must add that here and overwrite all the curly brackets at the end:
 
 16.	Create a new custom service entity in the Sales and Service Cloud V2 frontend, convert the CAP json file, download the final json definition 
 
-17. Instead of adjusting the metadata we directly download it here: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json). Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon as the CAP conversion is currently undergoing a huge improvement. Here are some improvements that might be necessary.
+17. Instead of adjusting the metadata we can directly download it here for this example: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json).
+
+Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon as the CAP conversion is currently undergoing a huge improvement. Here are some improvements that might be necessary.
 -   Add a unique object type code ```"objectTypeCode": "CUS1329",``` on your entity level 
 -   Add a label on the top entity level ```"label": "Samples",```
 -   Make sure that your name on service definition level (very top) is unique in your tenant ```"name": "SampleV3",```
@@ -859,7 +861,7 @@ Add the needed API part:
 
 ## UI Generation and Testing
 
-18. Upload the adjusted metadata file in custom services
+18. Upload the adjusted [metadata](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json) file in custom services
     
 19.	Add UI’s to your custom service and add your deployed backend as the Host
     

@@ -30,9 +30,12 @@ Important: If you try this out with several colleagues on the same BTP, please m
 - [Getting Started](#getting-started)
 - [Data Model and Service](#data-model-and-service)
 - [Configuration](#configuration)
-- [Custom Logic](#custom-logic)
+- [Backend Logic](#backend-logic)
 - [Deployment](#deployment)
 - [Metadata](#metadata)
+- [Business Logic](#business-logic)
+- [Timeline Feature](#timeline-feature)
+- [ToDos](#ToDos)
 
 ## Getting Started
 
@@ -318,7 +321,7 @@ Snippet 5:
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/66fec41aff37011bd395f9b8e591f4cd2178e029/images/ReduceMemory.png">
 
-## Custom Logic
+## Backend Logic
 
 11. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose.
 
@@ -682,6 +685,8 @@ For the other value selectors you must do it the same way. Please see below all 
 
 Now after this we have some additional steps to further enhance your custom service.
 
+## Business Logic
+
 23. Validation: Let's add a simple validation to the sample request on create. We want to check that the "number of samples" cannot be 0.
 ```
 // Validate before CREATE (only for root Samples entity)
@@ -716,6 +721,8 @@ Now after this we have some additional steps to further enhance your custom serv
       }
     }
 ```
+
+## Timeline Feature
 
 25. Bonus: Enable the timeline feature. There several configuratoin steps involved which your "trainer" will show you. After that add the below code to your service. Note: This code still must be reviewed.
 
@@ -773,12 +780,11 @@ Now after this we have some additional steps to further enhance your custom serv
     
   });
 ```
+## Todos
 
 Planned Todo's for this Tutorial:
 - End to End Video
-- add npm update in the beginning following an cds watch to show how easy you can test your backend locally
 - Finalize the timeline feature
-- Finalize the "perfect" schema (i.e. rework the associations)
 - Review all the nodeJS code
 - Add the related entity and document flow topics
 - Add a service for "custom key metrics"

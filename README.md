@@ -674,6 +674,27 @@ For Product
 }
 ```
 
+For Employee
+```
+"objectReference": {
+    "targetAttribute": "id",
+    "targetEntity": "sap.ssc.md.employeeservice.entity.employee",
+    "keyGroup": "employee",
+    "targetService": "sap.ssc.md.service.employeeService"
+}
+```
+
+For Opportunity
+```
+not yet supported - coming soon
+```
+
+For Case
+```
+not yet supported - coming soon
+```
+
+
 -   Adjust the currency code to the V2 services
 ```"targetAttribute": "code",
     "targetEntity": "sap.ssc.i18nservice.entity.currency",

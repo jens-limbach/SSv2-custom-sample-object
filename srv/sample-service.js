@@ -100,7 +100,7 @@ module.exports = cds.service.impl(async function () {
                         
                         if (accountResponse?.value) {
                             entity.account = {
-                                id: accountResponse.value.id,
+                                accountID: accountResponse.value.id,
                                 name: accountResponse.value.formattedName,
                                 displayId: accountResponse.value.displayId
                             };
@@ -159,7 +159,7 @@ module.exports = cds.service.impl(async function () {
             accountDataBatchResp.responses.forEach((eachAccDtl, index) => {
                 if (eachAccDtl?.body?.value) {
                     samples[index]['account'] = { 
-                        id: eachAccDtl.body.value.id,
+                        accountID: eachAccDtl.body.value.id,
                         name: eachAccDtl.body.value.formattedName,
                         displayId: eachAccDtl.body.value.displayId
                     };

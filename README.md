@@ -235,8 +235,7 @@ Snippet 3:
 - If you follow the given link in the terminal you will be re-directed to a website running locally. When you click on the service endpoint for the samples you will see the result of a GET request. Currently we have no data thats why it looks quite empty.
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/e44362235393c3c60460ee9e5d3f20be74af2cdc/images/cds%20server%20preview.png">
 
-If you want you can send with any tool as POST request to the same endpoint:
-<a href="http://localhost:4004/sample-service/Sample" target="_blank">http://localhost:4004/sample-service/Sample</a>
+If you want you can also send with any tool  POST request to the same endpoint and try out how it feels to create new samples in your local database via your newly created backend. This is the endpoint of your "local" backend: <a href="http://localhost:4004/sample-service/Sample" target="_blank">http://localhost:4004/sample-service/Sample</a>
 
 You can use for the first test a very simple payload like:
 ```
@@ -248,7 +247,7 @@ You can use for the first test a very simple payload like:
 }
 ```
 
-9. We need to adjust a few more files. Adjust the ```app/router/xs-app.json``` by adding CORS exceptions (for your tenant) and adjust authMethod=none -> Snippet 4 and 5
+9. Before we deploy  we need to adjust a few more configuration files. Adjust the ```app/router/xs-app.json``` by adding CORS exceptions (for your tenant) and adjust authMethod=none -> Snippet 4 and 5
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/xs-app-json.png">
  

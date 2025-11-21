@@ -10,7 +10,7 @@ The above video shows very nice all the detailed steps including both the CAP an
 
 If you want to see less CAP Development and more on how it looks later for the end-user I can recommend you to watch this more high level [overview video](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_zptgr1j5) for custom services.
 
-*PS: If you are also interessted in some very basics about extensibility you can also check out my [main page](https://github.com/jens-limbach/SSv2-extensibility-workshop) with a guide on mashups and custom code in a cloud function.*
+*PS: If you are also interessted in some very basics about extensibility you can also check out my [beginners extensibility workshop](https://github.com/jens-limbach/SSv2-extensibility-workshop) with a guide on mashups and custom code in a cloud function.*
 
 ## Table of Contents
 - [Pre-requisites](#Pre-requisites)

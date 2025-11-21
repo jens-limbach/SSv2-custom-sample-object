@@ -90,7 +90,7 @@
               "label": "numberOfSamples content"
             },
             {
-              "name": "uomCode",
+              "name": "unitOfMeasure",
               "dataType": "STRING",
               "dataFormat": "CODE",
               "creatable": false,
@@ -98,7 +98,7 @@
               "nullable": true,
               "sortable": false,
               "filterable": false,
-              "label": "numberOfSamples uomCode",
+              "label": "numberOfSamples unitOfMeasure",
               "keyType": "FOREIGN",
               "objectReference": {
                 "associationType": "ASSOCIATION",
@@ -649,15 +649,81 @@
           "entityReference": "Notes",
           "objectDefinition": [
             {
+              "name": "createdAt",
+              "dataType": "DATETIME",
+              "dataFormat": "DATETIME",
+              "creatable": false,
+              "updatable": false,
+              "nullable": true,
+              "sortable": false,
+              "filterable": false,
+              "label": "notes createdAt"
+            },
+            {
+              "name": "createdBy",
+              "dataType": "STRING",
+              "dataFormat": "STRING",
+              "creatable": false,
+              "updatable": false,
+              "nullable": true,
+              "sortable": false,
+              "filterable": false,
+              "label": "notes createdBy"
+            },
+            {
+              "name": "modifiedAt",
+              "dataType": "DATETIME",
+              "dataFormat": "DATETIME",
+              "creatable": false,
+              "updatable": false,
+              "nullable": true,
+              "sortable": false,
+              "filterable": false,
+              "label": "notes modifiedAt"
+            },
+            {
+              "name": "modifiedBy",
+              "dataType": "STRING",
+              "dataFormat": "STRING",
+              "creatable": false,
+              "updatable": false,
+              "nullable": true,
+              "sortable": false,
+              "filterable": false,
+              "label": "notes modifiedBy"
+            },
+            {
+              "name": "ID",
+              "dataType": "STRING",
+              "dataFormat": "UUID",
+              "creatable": false,
+              "updatable": false,
+              "nullable": true,
+              "sortable": false,
+              "filterable": false,
+              "label": "notes ID"
+            },
+            {
               "name": "note",
               "dataType": "STRING",
               "dataFormat": "STRING",
-              "creatable": true,
-              "updatable": true,
+              "creatable": false,
+              "updatable": false,
               "nullable": true,
               "sortable": false,
               "filterable": false,
               "label": "notes note"
+            },
+            {
+              "name": "sampleID",
+              "dataType": "STRING",
+              "dataFormat": "UUID",
+              "creatable": false,
+              "updatable": false,
+              "nullable": true,
+              "sortable": false,
+              "filterable": false,
+              "label": "notes sampleID"
             }
           ]
         }
@@ -836,115 +902,6 @@
         }
       ],
       "entityReference": "Samples"
-    },
-    {
-      "name": "NotesApiCAP",
-      "description": "API for interacting with BTP Notes service",
-      "title": "BTP Notes API",
-      "apiPath": "/sample-service/Samples/{id}/notes",
-      "entityReference": "Notes",
-      "operations": [
-        {
-          "id": "readNotes",
-          "path": "/",
-          "method": "READ",
-          "request": {
-            "pathVariables": [
-              { "name": "id", "dataType": "STRING", "dataFormat": "UUID" }
-            ]
-          },
-          "responses": [
-            { "description": "200 OK", "responseCode": "200" },
-            { "description": "400 BAD_REQUEST", "responseCode": "400" },
-            { "description": "401 UNAUTHORIZED", "responseCode": "401" },
-            { "description": "403 FORBIDDEN", "responseCode": "403" },
-            { "description": "404 NOT_FOUND", "responseCode": "404" },
-            {
-              "description": "500 INTERNAL_SERVER_ERROR",
-              "responseCode": "500"
-            }
-          ]
-        },
-        {
-          "id": "readNote",
-          "path": "/{noteID}",
-          "method": "READ",
-          "request": {
-            "pathVariables": [
-              { "name": "noteID", "dataType": "STRING", "dataFormat": "UUID" }
-            ]
-          },
-          "responses": [
-            { "description": "200 OK", "responseCode": "200" },
-            { "description": "400 BAD_REQUEST", "responseCode": "400" },
-            { "description": "401 UNAUTHORIZED", "responseCode": "401" },
-            { "description": "403 FORBIDDEN", "responseCode": "403" },
-            { "description": "404 NOT_FOUND", "responseCode": "404" },
-            {
-              "description": "500 INTERNAL_SERVER_ERROR",
-              "responseCode": "500"
-            }
-          ]
-        },
-        {
-          "id": "createNote",
-          "path": "/",
-          "method": "POST",
-          "request": { "pathVariables": [] },
-          "responses": [
-            { "description": "201 Created", "responseCode": "201" },
-            { "description": "400 BAD_REQUEST", "responseCode": "400" },
-            { "description": "401 UNAUTHORIZED", "responseCode": "401" },
-            { "description": "403 FORBIDDEN", "responseCode": "403" },
-            {
-              "description": "500 INTERNAL_SERVER_ERROR",
-              "responseCode": "500"
-            }
-          ]
-        },
-        {
-          "id": "updateNote",
-          "path": "/{noteID}",
-          "method": "PATCH",
-          "request": {
-            "pathVariables": [
-              { "name": "noteID", "dataType": "STRING", "dataFormat": "UUID" }
-            ]
-          },
-          "responses": [
-            { "description": "200 OK", "responseCode": "200" },
-            { "description": "400 BAD_REQUEST", "responseCode": "400" },
-            { "description": "401 UNAUTHORIZED", "responseCode": "401" },
-            { "description": "403 FORBIDDEN", "responseCode": "403" },
-            { "description": "404 NOT_FOUND", "responseCode": "404" },
-            {
-              "description": "500 INTERNAL_SERVER_ERROR",
-              "responseCode": "500"
-            }
-          ]
-        },
-        {
-          "id": "deleteNote",
-          "path": "/{noteID}",
-          "method": "DELETE",
-          "request": {
-            "pathVariables": [
-              { "name": "noteID", "dataType": "STRING", "dataFormat": "UUID" }
-            ]
-          },
-          "responses": [
-            { "description": "200 OK", "responseCode": "200" },
-            { "description": "400 BAD_REQUEST", "responseCode": "400" },
-            { "description": "401 UNAUTHORIZED", "responseCode": "401" },
-            { "description": "403 FORBIDDEN", "responseCode": "403" },
-            { "description": "404 NOT_FOUND", "responseCode": "404" },
-            {
-              "description": "500 INTERNAL_SERVER_ERROR",
-              "responseCode": "500"
-            }
-          ]
-        }
-      ]
     }
   ]
 }

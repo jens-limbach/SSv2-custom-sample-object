@@ -90,7 +90,7 @@
               "label": "numberOfSamples content"
             },
             {
-              "name": "unitOfMeasure",
+              "name": "uomCode",
               "dataType": "STRING",
               "dataFormat": "CODE",
               "creatable": false,
@@ -98,7 +98,7 @@
               "nullable": true,
               "sortable": false,
               "filterable": false,
-              "label": "numberOfSamples unitOfMeasure",
+              "label": "numberOfSamples uomCode",
               "keyType": "FOREIGN",
               "objectReference": {
                 "associationType": "ASSOCIATION",
@@ -649,81 +649,15 @@
           "entityReference": "Notes",
           "objectDefinition": [
             {
-              "name": "createdAt",
-              "dataType": "DATETIME",
-              "dataFormat": "DATETIME",
-              "creatable": false,
-              "updatable": false,
-              "nullable": true,
-              "sortable": false,
-              "filterable": false,
-              "label": "notes createdAt"
-            },
-            {
-              "name": "createdBy",
-              "dataType": "STRING",
-              "dataFormat": "STRING",
-              "creatable": false,
-              "updatable": false,
-              "nullable": true,
-              "sortable": false,
-              "filterable": false,
-              "label": "notes createdBy"
-            },
-            {
-              "name": "modifiedAt",
-              "dataType": "DATETIME",
-              "dataFormat": "DATETIME",
-              "creatable": false,
-              "updatable": false,
-              "nullable": true,
-              "sortable": false,
-              "filterable": false,
-              "label": "notes modifiedAt"
-            },
-            {
-              "name": "modifiedBy",
-              "dataType": "STRING",
-              "dataFormat": "STRING",
-              "creatable": false,
-              "updatable": false,
-              "nullable": true,
-              "sortable": false,
-              "filterable": false,
-              "label": "notes modifiedBy"
-            },
-            {
-              "name": "ID",
-              "dataType": "STRING",
-              "dataFormat": "UUID",
-              "creatable": false,
-              "updatable": false,
-              "nullable": true,
-              "sortable": false,
-              "filterable": false,
-              "label": "notes ID"
-            },
-            {
               "name": "note",
               "dataType": "STRING",
               "dataFormat": "STRING",
-              "creatable": false,
-              "updatable": false,
+              "creatable": true,
+              "updatable": true,
               "nullable": true,
               "sortable": false,
               "filterable": false,
               "label": "notes note"
-            },
-            {
-              "name": "sampleID",
-              "dataType": "STRING",
-              "dataFormat": "UUID",
-              "creatable": false,
-              "updatable": false,
-              "nullable": true,
-              "sortable": false,
-              "filterable": false,
-              "label": "notes sampleID"
             }
           ]
         }

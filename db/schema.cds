@@ -49,7 +49,7 @@ entity Amount {
 entity Quantity {
     key ID        : UUID;
     content       : Integer;
-    unitOfMeasure : String;
+    uomCode       : String; // Unit of Measure Code
 }
 
 // Enum types

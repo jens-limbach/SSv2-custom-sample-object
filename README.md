@@ -705,12 +705,42 @@ not yet supported - coming soon
     "targetService": "sap.ssc.service.i18nService"
 ```
 
--   Make the notes "creatable" and "updatable" and add manually the API for the sub-structure "Notes" in the api section directly after the "Samples" API definition
+-   Make the notes "creatable" and "updatable", remove admin fields and add manually the API for the sub-structure "Notes" in the api section directly after the "Samples" API definition
 
-Change your "note" field on your notes structure to cretable and updatable : true
+Change your "note" field on your notes structure to creatable and updatable : true
 ```
               "creatable": true,
               "updatable": true,
+```
+
+Remove all administrative fields from the metadata (createdBy, updatedBy, modifiedAt, createdAt, Sample_ID) because they are only calculated by the backend. After that your notes array should look very simple like this (be carefull not to change the business entity but only the array which is part of the Samples entity):
+```
+{
+          "name": "notes",
+          "label": "notes",
+          "dataType": "ARRAY",
+          "itemDataType": "OBJECT",
+          "nullable": true,
+          "creatable": true,
+          "updatable": true,
+          "filterable": false,
+          "searchable": false,
+          "sortable": false,
+          "entityReference": "Notes",
+          "objectDefinition": [
+            {
+              "name": "note",
+              "dataType": "STRING",
+              "dataFormat": "STRING",
+              "creatable": true,
+              "updatable": true,
+              "nullable": true,
+              "sortable": false,
+              "filterable": false,
+              "label": "notes note"
+            }
+          ]
+        }
 ```
 
 Add the needed API part:

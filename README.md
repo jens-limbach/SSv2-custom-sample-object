@@ -12,21 +12,8 @@ If you want to see less CAP Development and more on how it looks later for the e
 
 *PS: If you are also interessted in some very basics about extensibility you can also check out my [main page](https://github.com/jens-limbach/SSv2-extensibility-workshop) with a guide on mashups and custom code in a cloud function.*
 
-**Pre-requisites:**
-
-- You have a BTP sub-account and access to Cloud Foundry (you can use a free <a href="https://account.hanatrial.ondemand.com/" target="_blank">BTP Trial</a>)
-- You have setup a Hana Cloud on your BTP Sub-Account (take a look [here](https://github.com/jens-limbach/SSv2-extensibility-workshop/blob/main/hana-setup.md) for the basic steps needed)
-- You have setup VSCode and done the initial setup for CAP
-- You have enabled the Custom Services feature for creating new entities in your SAP Sales and Service Cloud V2
-- You are a little bit familiar with coding or curious enough to get into it :)
-
-Hint: We will be using SAP CAP (Cloud Application Programming Model) for our backend, you can read more about it here: <a href="https://cap.cloud.sap/docs/get-started/" target="_blank">CAP Documentation</a>
-
-**Step by Step Guide:**
-
-Important: If you try this out with several colleagues on the same BTP, please make sure you replace the suffix "JL" with your initials to make it unique.
-
 ## Table of Contents
+- [Pre-requisites](#Pre-requisites)
 - [Getting Started](#getting-started)
 - [Data Model and Service](#data-model-and-service)
 - [Configuration](#configuration)
@@ -37,7 +24,20 @@ Important: If you try this out with several colleagues on the same BTP, please m
 - [Timeline Feature](#timeline-feature)
 - [ToDos](#ToDos)
 
+## Pre-requisites
+
+- You have a BTP sub-account and access to Cloud Foundry (you can use a free <a href="https://account.hanatrial.ondemand.com/" target="_blank">BTP Trial</a>)
+Warning: SAP temporarly disabled cloud foundry deployments on BTP which means you need a proper BTP sub-account at the moment.
+- You have setup a Hana Cloud on your BTP Sub-Account (take a look [here](https://github.com/jens-limbach/SSv2-extensibility-workshop/blob/main/hana-setup.md) for the basic steps needed)
+- You have setup VSCode and done the initial setup for CAP
+- You have enabled the Custom Services feature for creating new entities in your SAP Sales and Service Cloud V2
+- You are a little bit familiar with coding or curious enough to get into it :)
+
+Hint: We will be using SAP CAP (Cloud Application Programming Model) for our backend, you can read more about it here: <a href="https://cap.cloud.sap/docs/get-started/" target="_blank">CAP Documentation</a>
+
 ## Getting Started
+
+Important: If you try this out with several colleagues on the same BTP, please make sure you replace the suffix "JL" with your initials to make it unique.
 
 1.	Open VSCode and the terminal
 2.	Enter in the terminal ```cds init SampleJL```

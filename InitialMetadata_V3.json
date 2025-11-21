@@ -145,9 +145,9 @@
               "label": "costOfSample currencyCode",
               "keyType": "FOREIGN",
               "objectReference": {
-                 "targetAttribute": "code",
-                 "targetEntity": "sap.ssc.i18nservice.entity.currency",
-                 "targetService": "sap.ssc.service.i18nService",
+                "targetAttribute": "",
+                "targetEntity": "",
+                "targetService": "",
                 "associationType": "ASSOCIATION"
               }
             },
@@ -295,6 +295,25 @@
           "sortable": false,
           "objectDefinition": [
             {
+              "name": "ID",
+              "dataType": "STRING",
+              "dataFormat": "UUID",
+              "creatable": false,
+              "updatable": false,
+              "nullable": true,
+              "sortable": false,
+              "filterable": false,
+              "label": "product ID",
+              "keyType": "FOREIGN",
+              "objectReference": {
+                "associationType": "ASSOCIATION",
+                "targetEntity": "Product",
+                "targetAttribute": "ID",
+                "keyGroup": "product",
+                "targetService": "Sample"
+              }
+            },
+            {
               "name": "productID",
               "dataType": "STRING",
               "dataFormat": "UUID",
@@ -304,13 +323,10 @@
               "sortable": false,
               "filterable": false,
               "label": "product productID",
-              "descriptionAttribute": "name",
-              "keyType": "FOREIGN",
               "objectReference": {
-                   "targetAttribute": "id",
-                   "targetEntity": "sap.ssc.md.productservice.entity.product",
-                    "keyGroup": "product",
-                    "targetService": "sap.ssc.md.service.productService"
+                "associationType": "REFERENCE",
+                "targetAttribute": "productID",
+                "keyGroup": "product"
               }
             },
             {
@@ -359,22 +375,38 @@
           "sortable": false,
           "objectDefinition": [
             {
+              "name": "ID",
+              "dataType": "STRING",
+              "dataFormat": "UUID",
+              "creatable": false,
+              "updatable": false,
+              "nullable": true,
+              "sortable": false,
+              "filterable": false,
+              "label": "account ID",
+              "keyType": "FOREIGN",
+              "objectReference": {
+                "associationType": "ASSOCIATION",
+                "targetEntity": "Account",
+                "targetAttribute": "ID",
+                "keyGroup": "account",
+                "targetService": "Sample"
+              }
+            },
+            {
               "name": "accountID",
               "dataType": "STRING",
               "dataFormat": "UUID",
-              "creatable": true,
-              "updatable": true,
+              "creatable": false,
+              "updatable": false,
               "nullable": true,
               "sortable": false,
               "filterable": false,
               "label": "account accountID",
-              "descriptionAttribute": "name",
-              "keyType": "FOREIGN",
               "objectReference": {
-                "targetAttribute": "id",
-                "targetEntity": "sap.ssc.md.accountservice.entity.account",
-                "keyGroup": "account",
-                "targetService": "sap.ssc.md.service.accountService"
+                "associationType": "REFERENCE",
+                "targetAttribute": "accountID",
+                "keyGroup": "account"
               }
             },
             {
@@ -423,22 +455,38 @@
           "sortable": false,
           "objectDefinition": [
             {
+              "name": "ID",
+              "dataType": "STRING",
+              "dataFormat": "UUID",
+              "creatable": false,
+              "updatable": false,
+              "nullable": true,
+              "sortable": false,
+              "filterable": false,
+              "label": "employee ID",
+              "keyType": "FOREIGN",
+              "objectReference": {
+                "associationType": "ASSOCIATION",
+                "targetEntity": "Employee",
+                "targetAttribute": "ID",
+                "keyGroup": "employee",
+                "targetService": "Sample"
+              }
+            },
+            {
               "name": "employeeID",
               "dataType": "STRING",
               "dataFormat": "UUID",
-              "creatable": true,
-              "updatable": true,
+              "creatable": false,
+              "updatable": false,
               "nullable": true,
               "sortable": false,
               "filterable": false,
               "label": "employee employeeID",
-              "descriptionAttribute": "name",
-              "keyType": "FOREIGN",
               "objectReference": {
-                  "targetAttribute": "id",
-                  "targetEntity": "sap.ssc.md.employeeservice.entity.employee",
-                  "keyGroup": "employee",
-                  "targetService": "sap.ssc.md.service.employeeService"
+                "associationType": "REFERENCE",
+                "targetAttribute": "employeeID",
+                "keyGroup": "employee"
               }
             },
             {

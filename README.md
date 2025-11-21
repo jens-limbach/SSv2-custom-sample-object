@@ -26,9 +26,22 @@ Hint: We will be using SAP CAP (Cloud Application Programming Model) for our bac
 
 Important: If you try this out with several colleagues on the same BTP, please make sure you replace the suffix "JL" with your initials to make it unique.
 
+## Table of Contents
+- [Getting Started](#getting-started)
+- [Data Model and Service](#data-model-and-service)
+- [Configuration](#configuration)
+- [Custom Logic](#custom-logic)
+- [Deployment](#deployment)
+- [Metadata](#metadata)
+
+## Getting Started
+
 1.	Open VSCode and the terminal
 2.	Enter in the terminal ```cds init SampleJL```
 3.	Enter in the terminal  ```code SampleJL``` (on windows at least this opens the project in visual code :P)
+
+## Data Model and Service
+
 4.	Create ```schema.cds``` file with your entity in the db folder -> Snippet 1
 
 Snippet 1:
@@ -173,6 +186,7 @@ service SampleService @(path: '/sample-service') {
     event customer.ssc.sampleservice.event.SampleCreate {};
 }
 ```
+## Configuration
 
 6.	Enter in the terminal to add some additional features to our project:
    
@@ -304,6 +318,7 @@ Snippet 5:
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/66fec41aff37011bd395f9b8e591f4cd2178e029/images/ReduceMemory.png">
 
+## Custom Logic
 
 11. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose.
 
@@ -595,6 +610,7 @@ You must add that here and overwrite all the curly brackets at the end:
   }
 }
 ```
+## Deployment
 
 13.	Enter in your terminal
 
@@ -609,7 +625,9 @@ You must add that here and overwrite all the curly brackets at the end:
 ```cf deploy mta_file```
 
 14.	Copy the app router url and try out your backend service.
-    
+
+## Metadata
+
 15.	Enter in the terminal ```cds -2 json .\srv\Sample-service.cds > BackendService.json``` and copy the json into a new file.
 
 16.	Create a new custom service entity in the Sales and Service Cloud V2 frontend, convert the CAP json file, download the final json definition 

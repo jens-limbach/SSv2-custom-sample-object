@@ -615,20 +615,37 @@ You must add that here and overwrite all the curly brackets at the end:
 16.	Create a new custom service entity in the Sales and Service Cloud V2 frontend, convert the CAP json file, download the final json definition 
 
 17. Instead of adjusting the metadata we directly download it here: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json). Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon as the CAP conversion is currently undergoing a huge improvement. Here are some improvements that might be necessary.
--   Add a unique object type code ```"objectTypeCode": "CUS1329",``` on your entity level
--   If you cannot "edit" your objects, the attribute ```"description": true,``` might be missing on your "sampleName" field
--   If you cannot see your object in the timeline configuration, check if there is a label on the top entity level ```"label": "Samples",```
--   Also for the timeline makes sure there is an event defined and it has the correct entity reference ```"entityReference": "Samples",```
--   If you have boolean values you must remove the the data formats from the ```"dataType": "BOOLEAN",```
--   Add in the notes sections you must remove the additional "itemDataType"
+-   Add a unique object type code ```"objectTypeCode": "CUS1329",``` on your entity level 
+-   Add a label on the top entity level ```"label": "Samples",```
+-   Make sure that your name on service definition level (very top) is unique in your tenant ```"name": "SampleV3",```
+-   Replace all ```"dataType": "COMPOSITION",``` with ```"dataType": "OBJECT",```
+-   Add a notes api manually
+-   Map all value selectors (OVS) correctly:
+
+For Account:
+1. Remove the generated "ID" field (which only holds the CAP internal ID)
+2. Add to the accountID field the following attributes:
 ```
-"dataType": "ARRAY",
-"itemDataType": "OBJECT",
+              "descriptionAttribute": "name",
+              "keyType": "FOREIGN",
 ```
--   Check if all the enum values are generated correctly
--   Add a notes entity and api (if not generated automatically)
--   Remove the generated sample sub-structure in notes (which is currently generated because of the "back referencing")
--   Map all value selectors correctly
+3. Complete the objectReference section of the accountID like given below:
+```
+"objectReference": {
+                "targetAttribute": "id",
+                "targetEntity": "sap.ssc.md.accountservice.entity.account",
+                "keyGroup": "account",
+                "targetService": "sap.ssc.md.service.accountService"
+              }
+```
+
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/fc436c66b15088d890a2a75dd9313742d11b6bdf/images/MakeOVSwork.png">
+
+For the other value selectors you must do it the same way. Please see below all object References needed in this example:
+```
+"objectReference": {tbd}
+```
+
 -   Adjust the currency code to the V2 services
 ```"targetAttribute": "code",
     "targetEntity": "sap.ssc.i18nservice.entity.currency",

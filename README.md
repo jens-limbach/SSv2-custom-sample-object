@@ -699,11 +699,131 @@ For Case
 not yet supported - coming soon
 ```
 
-
 -   Adjust the currency code to the V2 services
 ```"targetAttribute": "code",
     "targetEntity": "sap.ssc.i18nservice.entity.currency",
     "targetService": "sap.ssc.service.i18nService"
+```
+
+-   Make the notes "creatable" and "updatable" and add manually the API for the sub-structure "Notes" in the api section directly after the "Samples" API definition
+
+Change your "note" field on your notes structure to cretable and updatable : true
+```
+              "creatable": true,
+              "updatable": true,
+```
+
+Add the needed API part:
+```
+{
+      "name": "NotesApiCAP",
+      "description": "API for interacting with BTP Notes service",
+      "title": "BTP Notes API",
+      "apiPath": "/sample-service/Samples/{id}/notes",
+      "entityReference": "Notes",
+      "operations": [
+        {
+          "id": "readNotes",
+          "path": "/",
+          "method": "READ",
+          "request": {
+            "pathVariables": [
+              { "name": "id", "dataType": "STRING", "dataFormat": "UUID" }
+            ]
+          },
+          "responses": [
+            { "description": "200 OK", "responseCode": "200" },
+            { "description": "400 BAD_REQUEST", "responseCode": "400" },
+            { "description": "401 UNAUTHORIZED", "responseCode": "401" },
+            { "description": "403 FORBIDDEN", "responseCode": "403" },
+            { "description": "404 NOT_FOUND", "responseCode": "404" },
+            {
+              "description": "500 INTERNAL_SERVER_ERROR",
+              "responseCode": "500"
+            }
+          ]
+        },
+        {
+          "id": "readNote",
+          "path": "/{noteID}",
+          "method": "READ",
+          "request": {
+            "pathVariables": [
+              { "name": "noteID", "dataType": "STRING", "dataFormat": "UUID" }
+            ]
+          },
+          "responses": [
+            { "description": "200 OK", "responseCode": "200" },
+            { "description": "400 BAD_REQUEST", "responseCode": "400" },
+            { "description": "401 UNAUTHORIZED", "responseCode": "401" },
+            { "description": "403 FORBIDDEN", "responseCode": "403" },
+            { "description": "404 NOT_FOUND", "responseCode": "404" },
+            {
+              "description": "500 INTERNAL_SERVER_ERROR",
+              "responseCode": "500"
+            }
+          ]
+        },
+        {
+          "id": "createNote",
+          "path": "/",
+          "method": "POST",
+          "request": { "pathVariables": [] },
+          "responses": [
+            { "description": "201 Created", "responseCode": "201" },
+            { "description": "400 BAD_REQUEST", "responseCode": "400" },
+            { "description": "401 UNAUTHORIZED", "responseCode": "401" },
+            { "description": "403 FORBIDDEN", "responseCode": "403" },
+            {
+              "description": "500 INTERNAL_SERVER_ERROR",
+              "responseCode": "500"
+            }
+          ]
+        },
+        {
+          "id": "updateNote",
+          "path": "/{noteID}",
+          "method": "PATCH",
+          "request": {
+            "pathVariables": [
+              { "name": "noteID", "dataType": "STRING", "dataFormat": "UUID" }
+            ]
+          },
+          "responses": [
+            { "description": "200 OK", "responseCode": "200" },
+            { "description": "400 BAD_REQUEST", "responseCode": "400" },
+            { "description": "401 UNAUTHORIZED", "responseCode": "401" },
+            { "description": "403 FORBIDDEN", "responseCode": "403" },
+            { "description": "404 NOT_FOUND", "responseCode": "404" },
+            {
+              "description": "500 INTERNAL_SERVER_ERROR",
+              "responseCode": "500"
+            }
+          ]
+        },
+        {
+          "id": "deleteNote",
+          "path": "/{noteID}",
+          "method": "DELETE",
+          "request": {
+            "pathVariables": [
+              { "name": "noteID", "dataType": "STRING", "dataFormat": "UUID" }
+            ]
+          },
+          "responses": [
+            { "description": "200 OK", "responseCode": "200" },
+            { "description": "400 BAD_REQUEST", "responseCode": "400" },
+            { "description": "401 UNAUTHORIZED", "responseCode": "401" },
+            { "description": "403 FORBIDDEN", "responseCode": "403" },
+            { "description": "404 NOT_FOUND", "responseCode": "404" },
+            {
+              "description": "500 INTERNAL_SERVER_ERROR",
+              "responseCode": "500"
+            }
+          ]
+        }
+      ]
+    }
 ```
 
 18. Upload the adjusted metadata file in custom services

@@ -295,25 +295,6 @@
           "sortable": false,
           "objectDefinition": [
             {
-              "name": "ID",
-              "dataType": "STRING",
-              "dataFormat": "UUID",
-              "creatable": false,
-              "updatable": false,
-              "nullable": true,
-              "sortable": false,
-              "filterable": false,
-              "label": "product ID",
-              "keyType": "FOREIGN",
-              "objectReference": {
-                "associationType": "ASSOCIATION",
-                "targetEntity": "Product",
-                "targetAttribute": "ID",
-                "keyGroup": "product",
-                "targetService": "Sample"
-              }
-            },
-            {
               "name": "productID",
               "dataType": "STRING",
               "dataFormat": "UUID",
@@ -323,10 +304,13 @@
               "sortable": false,
               "filterable": false,
               "label": "product productID",
+              "descriptionAttribute": "name",
+              "keyType": "FOREIGN",
               "objectReference": {
-                "associationType": "REFERENCE",
-                "targetAttribute": "productID",
-                "keyGroup": "product"
+                   "targetAttribute": "id",
+                   "targetEntity": "sap.ssc.md.productservice.entity.product",
+                    "keyGroup": "product",
+                    "targetService": "sap.ssc.md.service.productService"
               }
             },
             {
@@ -439,25 +423,6 @@
           "sortable": false,
           "objectDefinition": [
             {
-              "name": "ID",
-              "dataType": "STRING",
-              "dataFormat": "UUID",
-              "creatable": false,
-              "updatable": false,
-              "nullable": true,
-              "sortable": false,
-              "filterable": false,
-              "label": "employee ID",
-              "keyType": "FOREIGN",
-              "objectReference": {
-                "associationType": "ASSOCIATION",
-                "targetEntity": "Employee",
-                "targetAttribute": "ID",
-                "keyGroup": "employee",
-                "targetService": "Sample"
-              }
-            },
-            {
               "name": "employeeID",
               "dataType": "STRING",
               "dataFormat": "UUID",
@@ -467,10 +432,13 @@
               "sortable": false,
               "filterable": false,
               "label": "employee employeeID",
+              "descriptionAttribute": "name",
+              "keyType": "FOREIGN",
               "objectReference": {
-                "associationType": "REFERENCE",
-                "targetAttribute": "employeeID",
-                "keyGroup": "employee"
+                  "targetAttribute": "id",
+                  "targetEntity": "sap.ssc.md.employeeservice.entity.employee",
+                  "keyGroup": "employee",
+                  "targetService": "sap.ssc.md.service.employeeService"
               }
             },
             {

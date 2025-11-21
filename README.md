@@ -653,18 +653,25 @@ For Account:
 3. Complete the objectReference section of the accountID like given below:
 ```
 "objectReference": {
-                "targetAttribute": "id",
-                "targetEntity": "sap.ssc.md.accountservice.entity.account",
-                "keyGroup": "account",
-                "targetService": "sap.ssc.md.service.accountService"
-              }
+    "targetAttribute": "id",
+    "targetEntity": "sap.ssc.md.accountservice.entity.account",
+    "keyGroup": "account",
+    "targetService": "sap.ssc.md.service.accountService"
+  }
 ```
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/fc436c66b15088d890a2a75dd9313742d11b6bdf/images/MakeOVSwork.png">
 
 For the other value selectors you must do it the same way. Please see below all object References needed in this example:
+
+For Product
 ```
-"objectReference": {tbd}
+"objectReference": {
+      "targetAttribute": "id",
+      "targetEntity": "sap.ssc.md.productservice.entity.product",
+      "keyGroup": "product",
+      "targetService": "sap.ssc.md.service.productService"
+}
 ```
 
 -   Adjust the currency code to the V2 services

@@ -138,6 +138,31 @@ module.exports = cds.service.impl(async function () {
                 } else {
                     console.log('No productID present, skipping product enrichment in PATCH');
                 }
+
+                // Enrich with employee data
+                if (entity.employee && entity.employee.employeeID) {
+                    try {
+                        const productApi = await cds.connect.to("Product.Service");
+                        const employeeResponse = await productApi.send({
+                            method: "GET",
+                            path: `/sap/c4c/api/v1/employee-service/employees/${entity.employee.employeeID}?$select=displayId,id,formattedName`
+                        });
+                        
+                        if (employeeResponse?.value) {
+                            entity.employee = {
+                                employeeID: employeeResponse.value.id,
+                                name: employeeResponse.value.formattedName,
+                                displayId: employeeResponse.value.displayId
+                            };
+                            console.log("Employee enrichment completed for PATCH response");
+                        }
+                    } catch (err) {
+                        console.log('Employee enrichment failed in PATCH (non-critical):', err.message);
+                        // Continue without enrichment - employee stays as-is
+                    }
+                } else {
+                    console.log('No employeeID present, skipping employee enrichment in PATCH');
+                }
                 
                 return entity;
             }
@@ -260,6 +285,57 @@ module.exports = cds.service.impl(async function () {
                 }
             } else {
                 console.log("No products to enrich");
+            }
+
+            // === Employee Enrichment ===
+            const employeeRequestList = [];
+            const employeeSampleIndexMap = []; // Track which samples have employees
+
+            // forming batch call - only for samples that have employeeID
+            samples?.forEach((sa, index) => {  
+                if (!(sa.employee && sa.employee.employeeID)) {
+                    console.log(`Sample at index ${index} has no employeeID, skipping employee enrichment`);
+                    return;
+                }
+                let employeeCnsEndPoint = `/sap/c4c/api/v1/employee-service/employees/${sa.employee.employeeID}?$select=displayId,id,formattedName`;
+                employeeRequestList.push({
+                    "id": 'employeeCns_' + employeeRequestList.length,
+                    "url": employeeCnsEndPoint,
+                    "method": "GET"
+                });
+                employeeSampleIndexMap.push(index); // Store original sample index
+            });
+
+            // Process employee batch if there are any
+            if (employeeRequestList.length > 0) {
+                try {
+                    const employeeDataBatchResp = await productApi.send({
+                        method: "POST",
+                        path: `$batch`,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: {
+                            "requests": employeeRequestList
+                        }
+                    });
+
+                    employeeDataBatchResp.responses.forEach((eachEmpDtl, batchIndex) => {
+                        if (eachEmpDtl?.body?.value) {
+                            const originalSampleIndex = employeeSampleIndexMap[batchIndex];
+                            samples[originalSampleIndex]['employee'] = { 
+                                employeeID: eachEmpDtl.body.value.id,
+                                name: eachEmpDtl.body.value.formattedName,
+                                displayId: eachEmpDtl.body.value.displayId
+                            };
+                            console.log("Employee enrichment completed: "+eachEmpDtl.body.value.displayId+" "+eachEmpDtl.body.value.formattedName);
+                        }
+                    });
+                } catch (err) {
+                    console.error("Error during employee batch enrichment:", err);
+                }
+            } else {
+                console.log("No employees to enrich");
             }
 
             return samples;  

@@ -20,6 +20,7 @@ If you want to see less CAP Development and more on how it looks later for the e
 - [Backend Logic](#backend-logic)
 - [Deployment](#deployment)
 - [Metadata](#metadata)
+- [UI Generation and Testing](#ui-generation-and-testing)
 - [Business Logic](#business-logic)
 - [Timeline Feature](#timeline-feature)
 - [ToDos](#ToDos)
@@ -855,6 +856,8 @@ Add the needed API part:
       ]
     }
 ```
+
+## UI Generation and Testing
 
 18. Upload the adjusted metadata file in custom services
     

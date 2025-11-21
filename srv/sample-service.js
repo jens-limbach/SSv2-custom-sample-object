@@ -357,7 +357,9 @@ module.exports = cds.service.impl(async function () {
             return req.reject(400, 'Number of Samples must be greater than zero');
         }
 
-        // ... rest of your validation logic stays the same
+        // Append "X" to sampleName if dueDate is provided and later than today.
+        // If dueDate is not later than today remove trailing "X".
+        // (Only modifies sampleName when sampleName is part of the request.)
         if (d.dueDate && d.sampleName) {
             const due = new Date(d.dueDate);
             const today = new Date();

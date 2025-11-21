@@ -54,54 +54,42 @@ namespace sap.capire.customservice;
 
 using {managed} from '@sap/cds/common';
 
-entity Samples : managed {
+@isRootEntity : true
+entity Sample : managed {
     key ID                : UUID;
+
         @description
-        sampleName        : String(255); // Sample Name: Text
-        sampleType        : SampleCodeType;
-        numberOfSamples   : Integer; // Number of Samples: Number
-        shipToAddress     : String(255); // Ship to Address: Address (structured type)
+        sampleName        : String(255); // Descrptive name of the sample
+        sampleType        : SampleCodeType; // Sample Type: Select List
+
+        @dataFormat: 'QUANTITY'
+        numberOfSamples   : Composition of one Quantity; // Number of Samples
+        shipToAddress     : String(255); // Ship to Address
+
         @dataFormat: 'AMOUNT'
-        costOfSample      : Composition of Amount; // Cost of Sample: Currency
+        costOfSample      : Composition of one Amount; // Cost of Sample: Currency
         hazardous         : Boolean; // Hazardous: Boolean
         hazardousReason   : String(1000); // Hazardous Reason: Text-Long (1000 Chars)
+
         @dataFormat: 'DATE'
         dueDate           : Date; // Due Date: Date
         overdueStatusIcon : String(255); // Overdue Status: String to hold emoticon
         status            : StatusCodeType default 'OPEN'; // Status: Select List
-        // Only relevant if sampleType = withPackaging
-        PackagingHeight   : Decimal(15, 2); // Packagin Height
-        PackagingWidth    : Decimal(15, 2); // Packaging Width
-        PackagingMaterial : PackagingCodeType;
+
+        packagingHeight   : Decimal(15, 2); // Packaging Height
+        packagingWidth    : Decimal(15, 2); // Packaging Width
+        packagingMaterial : PackagingCodeType; // Packaging Material: Select List
 
         // Associations to other entities
-        productUUID       : UUID;
-        product           : Composition of Products
-                                on product.ID = productUUID; // Product: Relation (Part Number)
-
-        accountUUID      : UUID;
-        account           : Composition of Account
-                                on account.ID = accountUUID; // just a simple UUID is needed because it is foreign key scenario
-
-        employeeUUID      : UUID;
-        employee          : Association to Employee
-                                on employee.employeeID = employeeUUID; // Employee: Relation (Employee)
-
-        opportunityUUID   : UUID;
-        opportunity       : Association to Opportunities // Opportunity: Relation (Opportunity)
-                                on opportunity.opportunityID = opportunityUUID;
-
-        serviceCaseUUID   : UUID;
-        serviceCase       : Association to ServiceCases // Service Case: Relation (Service Case)
-                                on serviceCase.caseID = serviceCaseUUID;
-
-        // Composition: sub-entity Notes (one or many as needed)
-        notes             : Composition of many Notes
-                                on notes.sample = $self; // Composition of Notes
-
+        product           : Composition of one Product;
+        account           : Composition of one Account;
+        employee          : Composition of one Employee;
+        opportunity       : Composition of one Opportunity;
+        serviceCase       : Composition of one ServiceCase;
+        notes             : Composition of many Note on notes.sampleID = ID;
 }
 
-// Structured data type for Amount
+// Structured data type for Amount and Quantity
 @isCnsEntity: true
 entity Amount {
     key ID           : UUID;
@@ -109,67 +97,80 @@ entity Amount {
         content      : Decimal(10, 2);
 }
 
-// Enum types
+@isCnsEntity: true
+entity Quantity {
+    key ID        : UUID;
+    content       : Integer;
+    uomCode       : String; // Unit of Measure Code
+}
 
-type StatusCodeType : String @assert.range enum {
-    OPEN        = 'OPEN';
-    INPROGRESS  = 'INPROGRESS';  
-    DELIVERED   = 'DELIVERED';
-    RETURNED    = 'RETURNED';
-    OVERDUE     = 'OVERDUE';
+// Enum types
+type StatusCodeType    : String @assert.range enum {
+    OPEN = 'OPEN';
+    INPROGRESS = 'INPROGRESS';
+    DELIVERED = 'DELIVERED';
+    RETURNED = 'RETURNED';
+    OVERDUE = 'OVERDUE';
 }
 
 type PackagingCodeType : String @assert.range enum {
-    PLASTIC    = 'PLASTIC';
-    METAL  = 'METAL';
-    OTHERMATERIAL    = 'OTHERMATERIAL';
+    PLASTIC = 'PLASTIC';
+    METAL = 'METAL';
+    OTHERMATERIAL = 'OTHERMATERIAL';
 }
 
-type SampleCodeType : String @assert.range enum {
-    WITHPACKAGING    = 'WITHPACKAGING';
+type SampleCodeType    : String @assert.range enum {
+    WITHPACKAGING = 'WITHPACKAGING';
     WITHOUTPACKAGING = 'WITHOUTPACKAGING';
 }
-            
-            
 
-// New Notes sub-entity used as composition from Samples
-entity Notes : managed {
-    key notesID : UUID;
-        note    : String(1000);
-        sample  : Association to Samples; // association back to parent used by the ON-condition
+// New Notes sub-entity
+entity Note : managed {
+    key ID   : UUID;
+        note : String(1000);
+        sampleID : UUID;  // Foreign key to Sample
 }
 
 // Associated CRM entities
 
 @isCnsEntity: true
-entity Products {
-    key ID        : UUID;
-        productID : UUID;
-        displayId : String;
-        @description name      : String(255);
+entity Product {
+    key ID                : UUID;
+        productID         : UUID;
+        displayId         : String;
+        @description name : String(255);
 }
 
 @isCnsEntity: true
 entity Account {
-    key ID : UUID;
-        accountID : UUID;
-        displayId : String;
-        @description name      : String(255);
+    key ID                : UUID;
+        accountID         : UUID;
+        displayId         : String;
+        @description name : String(255);
 }
 
 @isCnsEntity: true
-entity Opportunities {
-    key opportunityID : UUID;
+entity Opportunity {
+    key ID                : UUID;
+        opportunityID     : UUID;
+        displayId         : String;
+        @description name : String(255);
 }
 
 @isCnsEntity: true
-entity ServiceCases {
-    key caseID : UUID;
+entity ServiceCase {
+    key ID                : UUID;
+        serviceCaseID     : UUID;
+        displayId         : String;
+        @description name : String(255);
 }
 
 @isCnsEntity: true
 entity Employee {
-    key employeeID : UUID;
+    key ID                : UUID;
+        employeeID        : UUID;
+        displayId         : String;
+        @description name : String(255);
 }
 ```
 
@@ -183,11 +184,13 @@ service SampleService @(path: '/sample-service') {
 
     // Projections so that we have those endpoints ready for our frontend application
     @odata.draft.bypass
-    entity Samples as projection on sampleschema.Samples excluding { createdAt, createdBy, modifiedBy };
-    entity Notes        as projection on sampleschema.Notes excluding { createdAt, createdBy, modifiedBy };
+    entity Samples      as projection on sampleschema.Sample;
+    entity Notes        as projection on sampleschema.Note;
 
-    // Event for the Timeline Entry
-    event customer.ssc.sampleservice.event.SampleCreate {};
+    // Events for Timeline and Autoflow in SAP Sales and Service Cloud V2
+    event SampleCreate {};
+    event SampleUpdate {};
+    event SampleDelete {};
 }
 ```
 ## Configuration
@@ -241,7 +244,7 @@ You can use for the first test a very simple payload like:
             "sampleName": "Postman Sample JL",
             "hazardous": true,
             "hazardousReason": "Some reason",
-            "numberOfSamples": 5
+            "shipToAddress": "some address"
 }
 ```
 
@@ -324,7 +327,7 @@ Snippet 5:
 
 ## Backend Logic
 
-11. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose.
+11. Create a ```sample-service.js``` file and add the following logic to it. This logic ensures the response is well formatted for our purpose and that we fetch live the display names and ID's of our linked "standard objects" account, product and employee.
 
 Snippet:
 ```
@@ -334,10 +337,10 @@ const { SELECT } = cds;
 
 module.exports = cds.service.impl(async function () {
 
-const { Samples } = this.entities;
+    const { Samples } = this.entities;  // ✅ Changed: Sample → Samples
 
- // Before Read to expand costOfSample and account safely
-    this.before('READ', Samples, (req) => {
+    // Before Read to expand costOfSample and account safely
+    this.before('READ', Samples, (req) => { 
         const sel = req.query && req.query.SELECT;
         if (!sel) return; // nothing to change for non-SELECT requests
 
@@ -346,13 +349,12 @@ const { Samples } = this.entities;
         // Initialize columns if not present
         if (!sel.columns) sel.columns = [];
 
-        // Add scalar fields for both GET and PATCH operations
+        
         const scalarFields = [
-            'ID', 
-            'sampleName', 'sampleType', 'numberOfSamples', 'shipToAddress',
+            'ID', 'createdAt', 'createdBy', 'modifiedAt', 'modifiedBy',
+            'sampleName', 'sampleType', 'shipToAddress',
             'hazardous', 'hazardousReason', 'dueDate', 'overdueStatusIcon', 'status',
-            'PackagingHeight', 'PackagingWidth', 'PackagingMaterial',
-            'productUUID', 'accountUUID', 'employeeUUID', 'opportunityUUID', 'serviceCaseUUID'
+            'packagingHeight', 'packagingWidth', 'packagingMaterial'
         ];
 
         // Add scalar fields if they don't exist
@@ -377,13 +379,17 @@ const { Samples } = this.entities;
         // Always ensure these specific expansions are available for after('READ') logic
         ensureNavExpand('costOfSample');
         ensureNavExpand('account');
+        ensureNavExpand('numberOfSamples');
         ensureNavExpand('product');
+        ensureNavExpand('employee');
+        ensureNavExpand('opportunity');
+        ensureNavExpand('serviceCase');
 
         console.log('Columns after modification:', sel.columns.map(col => col.ref));
     });
 
     // After UPDATE (PATCH) - return complete entity with all fields
-    this.after('UPDATE', Samples, async (result, req) => {
+    this.after('UPDATE', Samples, async (result, req) => {  
         console.log('🔥 after(UPDATE) handler triggered!');
         
         if (!result || !result.ID) {
@@ -394,21 +400,22 @@ const { Samples } = this.entities;
         try {
             console.log('PATCH operation - fetching complete entity with all fields');
             
-            // Re-read the updated entity with all scalar fields and expansions
+            
             const completeEntity = await cds.run(
-                SELECT.from(Samples)
+                SELECT.from(Samples)  // ✅ Changed: Sample → Samples
                     .where({ ID: result.ID })
                     .columns([
-                        // All scalar fields explicitly
-                        'ID', 
-                        'sampleName', 'sampleType', 'numberOfSamples', 'shipToAddress',
+                        'ID', 'createdAt', 'createdBy', 'modifiedAt', 'modifiedBy',
+                        'sampleName', 'sampleType', 'shipToAddress',
                         'hazardous', 'hazardousReason', 'dueDate', 'overdueStatusIcon', 'status',
-                        'PackagingHeight', 'PackagingWidth', 'PackagingMaterial',
-                        'productUUID', 'accountUUID', 'employeeUUID', 'opportunityUUID', 'serviceCaseUUID',
-                        // Navigation expansions
+                        'packagingHeight', 'packagingWidth', 'packagingMaterial', 
                         { ref: ['costOfSample'], expand: ['*'] },
                         { ref: ['account'], expand: ['*'] },
-                        { ref: ['product'], expand: ['*'] }
+                        { ref: ['numberOfSamples'], expand: ['*'] },
+                        { ref: ['product'], expand: ['*'] },
+                        { ref: ['employee'], expand: ['*'] },
+                        { ref: ['opportunity'], expand: ['*'] },
+                        { ref: ['serviceCase'], expand: ['*'] }
                     ])
             );
 
@@ -426,15 +433,68 @@ const { Samples } = this.entities;
                         
                         if (accountResponse?.value) {
                             entity.account = {
-                                id: accountResponse.value.id,
+                                accountID: accountResponse.value.id,
                                 name: accountResponse.value.formattedName,
                                 displayId: accountResponse.value.displayId
                             };
                             console.log("Account enrichment completed for PATCH response");
                         }
                     } catch (err) {
-                        console.log('Account enrichment failed in PATCH:', err.message);
+                        console.log('Account enrichment failed in PATCH (non-critical):', err.message);
+                        // Continue without enrichment - account stays as-is
                     }
+                } else {
+                    console.log('No accountID present, skipping account enrichment in PATCH');
+                }
+
+                // Enrich with product data
+                if (entity.product && entity.product.productID) {
+                    try {
+                        const productApi = await cds.connect.to("Product.Service");
+                        const productResponse = await productApi.send({
+                            method: "GET",
+                            path: `/sap/c4c/api/v1/product-service/products/${entity.product.productID}?$select=displayId,id,name`
+                        });
+                        
+                        if (productResponse?.value) {
+                            entity.product = {
+                                productID: productResponse.value.id,
+                                name: productResponse.value.name,
+                                displayId: productResponse.value.displayId
+                            };
+                            console.log("Product enrichment completed for PATCH response");
+                        }
+                    } catch (err) {
+                        console.log('Product enrichment failed in PATCH (non-critical):', err.message);
+                        // Continue without enrichment - product stays as-is
+                    }
+                } else {
+                    console.log('No productID present, skipping product enrichment in PATCH');
+                }
+
+                // Enrich with employee data
+                if (entity.employee && entity.employee.employeeID) {
+                    try {
+                        const productApi = await cds.connect.to("Product.Service");
+                        const employeeResponse = await productApi.send({
+                            method: "GET",
+                            path: `/sap/c4c/api/v1/employee-service/employees/${entity.employee.employeeID}?$select=displayId,id,formattedName`
+                        });
+                        
+                        if (employeeResponse?.value) {
+                            entity.employee = {
+                                employeeID: employeeResponse.value.id,
+                                name: employeeResponse.value.formattedName,
+                                displayId: employeeResponse.value.displayId
+                            };
+                            console.log("Employee enrichment completed for PATCH response");
+                        }
+                    } catch (err) {
+                        console.log('Employee enrichment failed in PATCH (non-critical):', err.message);
+                        // Continue without enrichment - employee stays as-is
+                    }
+                } else {
+                    console.log('No employeeID present, skipping employee enrichment in PATCH');
                 }
                 
                 return entity;
@@ -446,101 +506,179 @@ const { Samples } = this.entities;
         return result;
     });
 
-    
- // After Read to enrich account and product details
-    this.after('READ', 'Samples', async (Samples, req) => {
-       console.log("After.Read for sample was started");
-
+    // After Read to enrich account and product details
+    this.after('READ', 'Samples', async (samples, req) => {  // ✅ Changed: 'Sample' → 'Samples'
+        console.log("After.Read for sample was started");
 
         // Skip if there are no samples
-        if (!Samples || Samples.length === 0) {
-            return Samples;
+        if (!samples || samples.length === 0) {  
+            return samples;
         }
 
-        // Enrich account and product details based on a V2 API call
         try {
- 
-              // Get Account details and add to response
+            // === Account Enrichment ===
             const accountApi = await cds.connect.to("Account.Service");
-            const requestList2 = [];
+            const accountRequestList = [];
+            const accountSampleIndexMap = []; // Track which samples have accounts
 
-            // forming batch call
-            Samples?.forEach((sa, index) => {
-              if (!(sa.account && sa.account.accountID)) return;
+            // forming batch call - only for samples that have accountID
+            samples?.forEach((sa, index) => {  
+                if (!(sa.account && sa.account.accountID)) {
+                    console.log(`Sample at index ${index} has no accountID, skipping account enrichment`);
+                    return;
+                }
                 let accountCnsEndPoint = `/sap/c4c/api/v1/account-service/accounts/${sa.account.accountID}?$select=displayId,id,formattedName`;
-                requestList2.push({
-                    "id": 'accountCns_' + index++,
+                accountRequestList.push({
+                    "id": 'accountCns_' + accountRequestList.length,
                     "url": accountCnsEndPoint,
                     "method": "GET"
-                })
+                });
+                accountSampleIndexMap.push(index); // Store original sample index
             });
-            const accountDataBatchResp = await accountApi.send({
-                method: "POST",
-                path: `$batch`,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: {
-                    "requests": requestList2
-                }
-            });
-            accountDataBatchResp.responses.forEach((eachAccDtl, index) => {
-                if (eachAccDtl?.body?.value) {
-                    Samples[index]['account'] = {
-                        id: eachAccDtl.body.value.id,
-                        name: eachAccDtl.body.value.formattedName,
-                        displayId: eachAccDtl.body.value.displayId
-                    };
-                    console.log("Account response reached. Some values: "+eachAccDtl.body.value.displayId+" "+eachAccDtl.body.value.formattedName);
-                }
-            })
 
-            /*
-            // Get Product details and add to response
+            // Process account batch if there are any
+            if (accountRequestList.length > 0) {
+                try {
+                    const accountDataBatchResp = await accountApi.send({
+                        method: "POST",
+                        path: `$batch`,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: {
+                            "requests": accountRequestList
+                        }
+                    });
+
+                    accountDataBatchResp.responses.forEach((eachAccDtl, batchIndex) => {
+                        if (eachAccDtl?.body?.value) {
+                            const originalSampleIndex = accountSampleIndexMap[batchIndex];
+                            samples[originalSampleIndex]['account'] = { 
+                                accountID: eachAccDtl.body.value.id,
+                                name: eachAccDtl.body.value.formattedName,
+                                displayId: eachAccDtl.body.value.displayId
+                            };
+                            console.log("Account enrichment completed: "+eachAccDtl.body.value.displayId+" "+eachAccDtl.body.value.formattedName);
+                        }
+                    });
+                } catch (err) {
+                    console.error("Error during account batch enrichment:", err);
+                }
+            } else {
+                console.log("No accounts to enrich");
+            }
+
+            // === Product Enrichment ===
             const productApi = await cds.connect.to("Product.Service");
-            const requestList = [];
+            const productRequestList = [];
+            const productSampleIndexMap = []; // Track which samples have products
 
-            // forming batch call
-            Samples?.forEach((sa, index) => {
-              if (!(sa.product && sa.product.productID)) return;
-                console.log("Product ID: "+sa.product.productID);
+            // forming batch call - only for samples that have productID
+            samples?.forEach((sa, index) => {  
+                if (!(sa.product && sa.product.productID)) {
+                    console.log(`Sample at index ${index} has no productID, skipping product enrichment`);
+                    return;
+                }
                 let productCnsEndPoint = `/sap/c4c/api/v1/product-service/products/${sa.product.productID}?$select=displayId,id,name`;
-                requestList.push({
-                    "id": 'productCns_' + index++,
+                productRequestList.push({
+                    "id": 'productCns_' + productRequestList.length,
                     "url": productCnsEndPoint,
                     "method": "GET"
-                })
+                });
+                productSampleIndexMap.push(index); // Store original sample index
             });
-            const productDataBatchResp = await productApi.send({
-                method: "POST",
-                path: `$batch`,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: {
-                    "requests": requestList
+
+            // Process product batch if there are any
+            if (productRequestList.length > 0) {
+                try {
+                    const productDataBatchResp = await productApi.send({
+                        method: "POST",
+                        path: `$batch`,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: {
+                            "requests": productRequestList
+                        }
+                    });
+
+                    productDataBatchResp.responses.forEach((eachProdDtl, batchIndex) => {
+                        if (eachProdDtl?.body?.value) {
+                            const originalSampleIndex = productSampleIndexMap[batchIndex];
+                            samples[originalSampleIndex]['product'] = { 
+                                productID: eachProdDtl.body.value.id,
+                                name: eachProdDtl.body.value.name,
+                                displayId: eachProdDtl.body.value.displayId
+                            };
+                            console.log("Product enrichment completed: "+eachProdDtl.body.value.displayId+" "+eachProdDtl.body.value.name);
+                        }
+                    });
+                } catch (err) {
+                    console.error("Error during product batch enrichment:", err);
                 }
+            } else {
+                console.log("No products to enrich");
+            }
+
+            // === Employee Enrichment ===
+            const employeeRequestList = [];
+            const employeeSampleIndexMap = []; // Track which samples have employees
+
+            // forming batch call - only for samples that have employeeID
+            samples?.forEach((sa, index) => {  
+                if (!(sa.employee && sa.employee.employeeID)) {
+                    console.log(`Sample at index ${index} has no employeeID, skipping employee enrichment`);
+                    return;
+                }
+                let employeeCnsEndPoint = `/sap/c4c/api/v1/employee-service/employees/${sa.employee.employeeID}?$select=displayId,id,formattedName`;
+                employeeRequestList.push({
+                    "id": 'employeeCns_' + employeeRequestList.length,
+                    "url": employeeCnsEndPoint,
+                    "method": "GET"
+                });
+                employeeSampleIndexMap.push(index); // Store original sample index
             });
-            productDataBatchResp.responses.forEach((eachProdDtl, index) => {
-                if (eachProdDtl?.body?.value) {
-                    Samples[index]['product'] = {
-                        id: eachProdDtl.body.value.id,
-                        name: eachProdDtl.body.value.name,
-                        displayId: eachProdDtl.body.value.displayId
 
-                    };
-                    
+            // Process employee batch if there are any
+            if (employeeRequestList.length > 0) {
+                try {
+                    const employeeDataBatchResp = await productApi.send({
+                        method: "POST",
+                        path: `$batch`,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: {
+                            "requests": employeeRequestList
+                        }
+                    });
+
+                    employeeDataBatchResp.responses.forEach((eachEmpDtl, batchIndex) => {
+                        if (eachEmpDtl?.body?.value) {
+                            const originalSampleIndex = employeeSampleIndexMap[batchIndex];
+                            samples[originalSampleIndex]['employee'] = { 
+                                employeeID: eachEmpDtl.body.value.id,
+                                name: eachEmpDtl.body.value.formattedName,
+                                displayId: eachEmpDtl.body.value.displayId
+                            };
+                            console.log("Employee enrichment completed: "+eachEmpDtl.body.value.displayId+" "+eachEmpDtl.body.value.formattedName);
+                        }
+                    });
+                } catch (err) {
+                    console.error("Error during employee batch enrichment:", err);
                 }
-            })
-*/
+            } else {
+                console.log("No employees to enrich");
+            }
 
-            return Samples;
+            return samples;  
         } catch (err) {
-            return req.reject("Account and Product are mandatory. "+err);
+            console.error("Error during account enrichment:", err);
+            // Don't reject - just log error and return samples without enrichment
+            return samples;
         }    
-   })
-
-
+    });
+  
 });
 ```
 
@@ -593,6 +731,23 @@ You must add that here and overwrite all the curly brackets at the end:
           }
         }
       },
+      "Employee.Service": {
+        "kind": "rest",
+        "[production]": {
+          "credentials": {
+            "url": "https://YOURTENANT.de1.demo.crm.cloud.sap",
+            "username": "Dev",
+            "password": "Welcome1!"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "url": "https://YOURTENANT.de1.demo.crm.cloud.sap",
+            "username": "Dev",
+            "password": "Welcome1!"
+          }
+        }
+      },
       "Timeline.Service": {
         "kind": "rest",
         "[production]": {
@@ -628,17 +783,17 @@ You must add that here and overwrite all the curly brackets at the end:
 
 ```cf deploy mta_file```
 
-14.	Copy the app router url and try out your backend service.
+14.	Copy the app router url and try out your backend service via your browswer or any tool like "Bruno" or "Postman".
 
 ## Metadata
 
 15.	Enter in the terminal ```cds -2 json .\srv\Sample-service.cds > BackendService.json``` and copy the json into a new file.
 
-16.	Create a new custom service entity in the Sales and Service Cloud V2 frontend, convert the CAP json file, download the final json definition 
+16.	Go to your SAP Sales and Service Cloud solution. Navigate via System Settings to your Custom Services feature. Create a new custom service entity, and open th CAP json converter, convert the "BackendService.json"  file and download the new metadata json file. 
 
-17. Instead of adjusting the metadata we can directly download it here for this example: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json).
+17. Recommendation: Just download directly the finished metadata file here and continue with the next step instead: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata_V3.json). This file you can directly upload in your new custom service.
 
-Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear soon as the CAP conversion is currently undergoing a huge improvement. Here are some improvements that might be necessary.
+Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear as the CAP conversion is currently undergoing a huge improvement. Here are the steps you need to do if you want to go through this manual exercise:
 -   Add a unique object type code ```"objectTypeCode": "CUS1329",``` on your entity level 
 -   Add a label on the top entity level ```"label": "Samples",```
 -   Make sure that your name on service definition level (very top) is unique in your tenant ```"name": "SampleV3",```
@@ -861,35 +1016,32 @@ Add the needed API part:
 
 ## UI Generation and Testing
 
-18. Upload the adjusted [metadata](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata.json) file in custom services
+18. Upload the adjusted [metadata](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata_V3.json) file in custom services.
     
-19.	Add UI’s to your custom service and add your deployed backend as the Host
+19.	Create the UI’s via the design tool to your custom service and add your deployed backend as the host in the configuration.
     
-20.	Assign it to your user via a business role
+20.	Assign the new custom service to your user via a business role and also activate the new app.
     
-21.	Test!
+21.	Refresh and test your new fully functioning "custom object" which you created via our custom service feature.
     
-22.	After this is working we can start to build the custom UI on top of our running backend service!
-
-Now after this we have some additional steps to further enhance your custom service.
+22.	After this is working we have a strong foundation that we can extend in many ways. We can add sophisticated logic, add many more standard features (like timeline support, related entity support, mashups etc.) or create a complete custom frontend in any programming language of our liking (like Angular) on top of our professional backend.
 
 ## Business Logic
 
 23. Validation: Let's add a simple validation to the sample request on create. We want to check that the "number of samples" cannot be 0.
 ```
-// Validate before CREATE (only for root Samples entity)
-  this.before('CREATE', Samples, (req) => {
-    // ensure this runs only for the Samples root entity
-    if (req.target !== Samples) return;
+// Validate before CREATE (only for root Sample entity)
+    this.before('CREATE', Samples, (req) => {  
+        // ensure this runs only for the Sample root entity
+        if (req.target !== Samples) return; 
 
-    const d = req.data || {};
+        const d = req.data || {};
 
-    if (d.numberOfSamples != null && d.numberOfSamples <= 0) {
-      return req.reject(400, 'Number of Samples must be greater than zero');
-    }
+        if (d.numberOfSamples?.content != null && d.numberOfSamples.content <= 0) {
+            return req.reject(400, 'Number of Samples must be greater than zero');
+        }
    
     });
-
 ```
 
 24. Determination: Let's also add a simple determination during every create which is appending a red dot at the sample name if the sample is overdue. (this logic would better be also happening during every update)
@@ -898,21 +1050,21 @@ Now after this we have some additional steps to further enhance your custom serv
     // If dueDate is not later than today remove trailing "X".
     // (Only modifies sampleName when sampleName is part of the request.)
     if (d.dueDate && d.sampleName) {
-      const due = new Date(d.dueDate);
-      const today = new Date();
-      today.setHours(0,0,0,0);
-      due.setHours(0,0,0,0);
-      if (due < today && !d.sampleName.endsWith(' 🔴')) {
-        d.sampleName = `${d.sampleName} 🔴`;
-      } else if (due >= today && d.sampleName.endsWith(' 🔴')) {
-        d.sampleName = d.sampleName.slice(0, -2);
-      }
-    }
+            const due = new Date(d.dueDate);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            due.setHours(0,0,0,0);
+            if (due < today && !d.sampleName.endsWith(' 🔴')) {
+                d.sampleName = `${d.sampleName} 🔴`;
+            } else if (due >= today && d.sampleName.endsWith(' 🔴')) {
+                d.sampleName = d.sampleName.slice(0, -2);
+            }
+        }
 ```
 
 ## Timeline Feature
 
-25. Bonus: Enable the timeline feature. There several configuratoin steps involved which your "trainer" will show you. After that add the below code to your service. Note: This code still must be reviewed.
+25. Bonus: Enable the timeline feature. There several configuratoin steps involved which your "trainer" will show you. After that add the below code to your service. Note: This code still must be reviewed and is "work in progress".
 
 ```
 // After create: send REST call to create a new timeline entry
@@ -979,4 +1131,4 @@ Planned Todo's for this Tutorial:
 - Add example for multiple error messages including warnings and info messages
 - Add an example of a custom UI to this tutorial
 - Add more explanations around the connections in package.json and the cloud sdk
-- Link documentation (custom services, metadata guidelines etc.)
+- Link documentation in a seperate section (custom services, metadata guidelines, Github samples etc.)

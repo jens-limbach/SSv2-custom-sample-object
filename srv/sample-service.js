@@ -113,6 +113,31 @@ module.exports = cds.service.impl(async function () {
                 } else {
                     console.log('No accountID present, skipping account enrichment in PATCH');
                 }
+
+                // Enrich with product data
+                if (entity.product && entity.product.productID) {
+                    try {
+                        const productApi = await cds.connect.to("Product.Service");
+                        const productResponse = await productApi.send({
+                            method: "GET",
+                            path: `/sap/c4c/api/v1/product-service/products/${entity.product.productID}?$select=displayId,id,name`
+                        });
+                        
+                        if (productResponse?.value) {
+                            entity.product = {
+                                productID: productResponse.value.id,
+                                name: productResponse.value.name,
+                                displayId: productResponse.value.displayId
+                            };
+                            console.log("Product enrichment completed for PATCH response");
+                        }
+                    } catch (err) {
+                        console.log('Product enrichment failed in PATCH (non-critical):', err.message);
+                        // Continue without enrichment - product stays as-is
+                    }
+                } else {
+                    console.log('No productID present, skipping product enrichment in PATCH');
+                }
                 
                 return entity;
             }
@@ -133,53 +158,109 @@ module.exports = cds.service.impl(async function () {
         }
 
         try {
+            // === Account Enrichment ===
             const accountApi = await cds.connect.to("Account.Service");
-            const requestList2 = [];
-            const sampleIndexMap = []; // Track which samples have accounts
+            const accountRequestList = [];
+            const accountSampleIndexMap = []; // Track which samples have accounts
 
             // forming batch call - only for samples that have accountID
             samples?.forEach((sa, index) => {  
                 if (!(sa.account && sa.account.accountID)) {
-                    console.log(`Sample at index ${index} has no accountID, skipping enrichment`);
+                    console.log(`Sample at index ${index} has no accountID, skipping account enrichment`);
                     return;
                 }
                 let accountCnsEndPoint = `/sap/c4c/api/v1/account-service/accounts/${sa.account.accountID}?$select=displayId,id,formattedName`;
-                requestList2.push({
-                    "id": 'accountCns_' + requestList2.length,
+                accountRequestList.push({
+                    "id": 'accountCns_' + accountRequestList.length,
                     "url": accountCnsEndPoint,
                     "method": "GET"
                 });
-                sampleIndexMap.push(index); // Store original sample index
+                accountSampleIndexMap.push(index); // Store original sample index
             });
 
-            // If no accounts to enrich, return samples as-is
-            if (requestList2.length === 0) {
-                console.log("No accounts to enrich, returning samples as-is");
-                return samples;
+            // Process account batch if there are any
+            if (accountRequestList.length > 0) {
+                try {
+                    const accountDataBatchResp = await accountApi.send({
+                        method: "POST",
+                        path: `$batch`,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: {
+                            "requests": accountRequestList
+                        }
+                    });
+
+                    accountDataBatchResp.responses.forEach((eachAccDtl, batchIndex) => {
+                        if (eachAccDtl?.body?.value) {
+                            const originalSampleIndex = accountSampleIndexMap[batchIndex];
+                            samples[originalSampleIndex]['account'] = { 
+                                accountID: eachAccDtl.body.value.id,
+                                name: eachAccDtl.body.value.formattedName,
+                                displayId: eachAccDtl.body.value.displayId
+                            };
+                            console.log("Account enrichment completed: "+eachAccDtl.body.value.displayId+" "+eachAccDtl.body.value.formattedName);
+                        }
+                    });
+                } catch (err) {
+                    console.error("Error during account batch enrichment:", err);
+                }
+            } else {
+                console.log("No accounts to enrich");
             }
 
-            const accountDataBatchResp = await accountApi.send({
-                method: "POST",
-                path: `$batch`,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: {
-                    "requests": requestList2
+            // === Product Enrichment ===
+            const productApi = await cds.connect.to("Product.Service");
+            const productRequestList = [];
+            const productSampleIndexMap = []; // Track which samples have products
+
+            // forming batch call - only for samples that have productID
+            samples?.forEach((sa, index) => {  
+                if (!(sa.product && sa.product.productID)) {
+                    console.log(`Sample at index ${index} has no productID, skipping product enrichment`);
+                    return;
                 }
+                let productCnsEndPoint = `/sap/c4c/api/v1/product-service/products/${sa.product.productID}?$select=displayId,id,name`;
+                productRequestList.push({
+                    "id": 'productCns_' + productRequestList.length,
+                    "url": productCnsEndPoint,
+                    "method": "GET"
+                });
+                productSampleIndexMap.push(index); // Store original sample index
             });
 
-            accountDataBatchResp.responses.forEach((eachAccDtl, batchIndex) => {
-                if (eachAccDtl?.body?.value) {
-                    const originalSampleIndex = sampleIndexMap[batchIndex];
-                    samples[originalSampleIndex]['account'] = { 
-                        accountID: eachAccDtl.body.value.id,
-                        name: eachAccDtl.body.value.formattedName,
-                        displayId: eachAccDtl.body.value.displayId
-                    };
-                    console.log("Account response reached. Some values: "+eachAccDtl.body.value.displayId+" "+eachAccDtl.body.value.formattedName);
+            // Process product batch if there are any
+            if (productRequestList.length > 0) {
+                try {
+                    const productDataBatchResp = await productApi.send({
+                        method: "POST",
+                        path: `$batch`,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: {
+                            "requests": productRequestList
+                        }
+                    });
+
+                    productDataBatchResp.responses.forEach((eachProdDtl, batchIndex) => {
+                        if (eachProdDtl?.body?.value) {
+                            const originalSampleIndex = productSampleIndexMap[batchIndex];
+                            samples[originalSampleIndex]['product'] = { 
+                                productID: eachProdDtl.body.value.id,
+                                name: eachProdDtl.body.value.name,
+                                displayId: eachProdDtl.body.value.displayId
+                            };
+                            console.log("Product enrichment completed: "+eachProdDtl.body.value.displayId+" "+eachProdDtl.body.value.name);
+                        }
+                    });
+                } catch (err) {
+                    console.error("Error during product batch enrichment:", err);
                 }
-            });
+            } else {
+                console.log("No products to enrich");
+            }
 
             return samples;  
         } catch (err) {

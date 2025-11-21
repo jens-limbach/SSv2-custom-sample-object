@@ -650,7 +650,12 @@ For Account:
               "descriptionAttribute": "name",
               "keyType": "FOREIGN",
 ```
-3. Complete the objectReference section of the accountID like given below:
+3. Change the following attributes of the accountID to true:
+```
+              "creatable": true,
+              "updatable": true,
+```
+4. Complete the objectReference section of the accountID like given below:
 ```
 "objectReference": {
     "targetAttribute": "id",
@@ -660,7 +665,7 @@ For Account:
   }
 ```
 
-<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/fc436c66b15088d890a2a75dd9313742d11b6bdf/images/MakeOVSwork.png">
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/95f671852d3c2814a7ea23d5eddad70371a0cbae/images/MakeOVSwork2.png">
 
 For the other value selectors you must do it the same way. Please see below all object References needed in this example:
 

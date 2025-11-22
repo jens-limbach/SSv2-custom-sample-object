@@ -1,6 +1,6 @@
 {
   "service": {
-    "name": "SampleV3",
+    "name": "Sample",
     "title": "Sample",
     "description": "This service is for SampleV3.",
     "authorizationRelevant": true
@@ -11,7 +11,7 @@
       "title": "Samples",
       "entityType": "BUSINESS",
       "objectTypeCode": "CUS8735",
-      "label": "Sample",
+      "label": "Samples",
       "root": true,
       "creatable": false,
       "updatable": false,
@@ -715,19 +715,19 @@
     {
       "name": "SampleCreate",
       "title": "Sample",
-      "entityReference": "Sample",
+      "entityReference": "Samples",
       "trigger": "CREATE"
     },
     {
       "name": "SampleUpdate",
       "title": "Sample",
-      "entityReference": "Sample",
+      "entityReference": "Samples",
       "trigger": "UPDATE"
     },
     {
       "name": "SampleDelete",
       "title": "Sample",
-      "entityReference": "Sample",
+      "entityReference": "Samples",
       "trigger": "DELETE"
     }
   ],

@@ -800,15 +800,15 @@ Normally you would need to edit the downloaded metadata file a bit and make the 
 -   Replace all ```"dataType": "COMPOSITION",``` with ```"dataType": "OBJECT",```
 -   Add a notes api manually
 -   Make sure the entityReference is referencing your Entity name which is generated based on the service definition. In my case I need to add an "s" as the generator only generated "Sample" in singular. So add to all three events an "s" so that it looks like this:
-´´´
+```
   "events": [
     {
       "name": "SampleCreate",
       "title": "Sample",
-      "entityReference": "Samples",
+      "entityReference": "Samples", // here you need to add an "s" so that it fits to your entity (which is based on the service projection not on your schema)
       "trigger": "CREATE"
     },
-´´´
+```
 -   Map all value selectors (OVS) correctly:
 
 For Account:

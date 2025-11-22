@@ -23,6 +23,7 @@ If you want to see less CAP Development and more on how it looks later for the e
 - [UI Generation and Testing](#ui-generation-and-testing)
 - [Business Logic](#business-logic)
 - [Timeline Feature](#timeline-feature)
+- [Related Entities Feature](#related-entities-feature)
 - [ToDos](#ToDos)
 
 ## Pre-requisites
@@ -1035,6 +1036,10 @@ Add the needed API part:
     
 22.	After this is working we have a strong foundation that we can extend in many ways. We can add sophisticated logic, add many more standard features (like timeline support, related entity support, mashups etc.) or create a complete custom frontend in any programming language of our liking (like Angular) on top of our professional backend.
 
+Your finished custom object has now a new workcenter that can be assiged to users and the end result of the generate UI should look similar to the screenshot below.
+
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/392753605ea2c1c0a94445b8a5d9669e94aeb0b7/images/FinishedSample.png">
+
 ## Business Logic
 
 23. Validation: Let's add a simple validation to the sample request on create. We want to check that the "number of samples" cannot be 0.
@@ -1094,18 +1099,17 @@ Add the needed API part:
                 "subject": sample.ID,
                 "type": "customer.ssc.sampleservice.event.SampleCreate",
                 "specversion": "0.2",
-                // "source": "5d94e446cd3cdc6f7c324c50", // ns-staging
-                "source": "614cd785fe86ec5c905b4a00", // my1000265
+                "source": "614cd785fe86ec5c905b4a00",
                 "time": new Date().toISOString(), // "2024-11-11T01:10:00.180Z",
                 "datacontenttype": "application/json",
                 "data": {
                     "currentImage": {
                         "ID": sample.ID,
                         "sampleName": sample.sampleName,
+                        "status": sample.status,
                         "account": {
-                            "id": sample.account.accountID
-                        },
-                        "status": sample.status
+                            "accountID": sample.account.accountID
+                        }
                     }
                 }
             }
@@ -1130,6 +1134,17 @@ Add the needed API part:
         }
     });
 ```
+
+## Related Entities Feature
+
+It is possible to link your custom object as a successor or predecessor to your standard objects. This is only a simple configuration and then they will appear as linkable in your standard object under the "Related Entity" section. See screenshots below.
+
+Enable your custom object for related entities:
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/392753605ea2c1c0a94445b8a5d9669e94aeb0b7/images/ConfigureRelatedEntities1.png">
+
+Link your custom object to a standard entity:
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/392753605ea2c1c0a94445b8a5d9669e94aeb0b7/images/ConfigureRelatedEntities2.png">
+
 ## Todos
 
 Planned Todo's for this Tutorial:

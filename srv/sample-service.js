@@ -392,18 +392,17 @@ module.exports = cds.service.impl(async function () {
                 "subject": sample.ID,
                 "type": "customer.ssc.sampleservice.event.SampleCreate",
                 "specversion": "0.2",
-                // "source": "5d94e446cd3cdc6f7c324c50", // ns-staging
-                "source": "614cd785fe86ec5c905b4a00", // my1000265
+                "source": "614cd785fe86ec5c905b4a00",
                 "time": new Date().toISOString(), // "2024-11-11T01:10:00.180Z",
                 "datacontenttype": "application/json",
                 "data": {
                     "currentImage": {
                         "ID": sample.ID,
                         "sampleName": sample.sampleName,
+                        "status": sample.status,
                         "account": {
                             "accountID": sample.account.accountID
-                        },
-                        "status": sample.status
+                        }
                     }
                 }
             }

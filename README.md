@@ -1076,58 +1076,59 @@ Add the needed API part:
 25. Bonus: Enable the timeline feature. There several configuratoin steps involved which your "trainer" will show you. After that add the below code to your service. Note: This code still must be reviewed and is "work in progress".
 
 ```
-// After create: send REST call to create a new timeline entry
-  this.after('CREATE', Samples, async (sample, req) => {
-    console.log("After create logic started");
-
-    if (req.target !== Samples) return sample;
-
-    try {
-      const timelineApi = await cds.connect.to("Timeline.Service");
-
-      // generate event id and current time
-      const eventId = crypto.randomUUID();
-      const eventTime = new Date().toISOString();
-
-      // determine account id from sample (try several possible fields)
-      const accountId = sample.account.accountID;
-
-      const payload = {
-        id: eventId,
-        subject: sample.ID,                                  // subject equals the sample ID
-        type: "customer.ssc.samplefinalservice.event.SampleCreate",
-        specversion: "0.2",
-        source: "614cd785fe86ec5c905b4a00",
-        time: eventTime,
-        datacontenttype: "application/json",
-        data: {
-          currentImage: {
-            ID: sample.ID,
-            name: sample.sampleName,
-            status: sample.status,
-            account: {
-              id: accountId
+        this.after('CREATE', Samples, async (sample, req) => {
+        console.log("🔔 after('CREATE') handler triggered for Timeline event");
+        
+        // Sending Timeline event - requires prior configuration in the CRM system
+        try {
+            // Check if account exists before proceeding
+            if (!sample.account || !sample.account.accountID) {
+                console.log("⚠️ No account data present, skipping Timeline event");
+                return; // Skip timeline event if no account
             }
-          }
+
+            const inboundDataConnectorService = await cds.connect.to("Timeline.Service");
+            const randomUUID = crypto.randomUUID();
+            const payload = {
+                "id": randomUUID,
+                "subject": sample.ID,
+                "type": "customer.ssc.sampleservice.event.SampleCreate",
+                "specversion": "0.2",
+                // "source": "5d94e446cd3cdc6f7c324c50", // ns-staging
+                "source": "614cd785fe86ec5c905b4a00", // my1000265
+                "time": new Date().toISOString(), // "2024-11-11T01:10:00.180Z",
+                "datacontenttype": "application/json",
+                "data": {
+                    "currentImage": {
+                        "ID": sample.ID,
+                        "sampleName": sample.sampleName,
+                        "account": {
+                            "id": sample.account.accountID
+                        },
+                        "status": sample.status
+                    }
+                }
+            }
+            
+            console.log("📤 Sending Timeline event payload:", JSON.stringify(payload, null, 2));
+            
+            const sendActionResp = await inboundDataConnectorService.send({
+                method: "POST",
+                path: `/sap/c4c/api/v1/inbound-data-connector-service/events`,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "*/*"
+                },
+                data: payload
+            });
+            
+            console.log("✅ Timeline event sent successfully. Response:", JSON.stringify(sendActionResp, null, 2));
+        } catch (err) {
+            console.error("❌ Timeline event failed:", err.message);
+            // Don't reject - just log error and continue (non-critical)
+            console.log("Timeline event is optional, continuing with sample creation");
         }
-      };
-
-      const resp = await timelineApi.send({
-        method: "POST",
-        path: "/sap/c4c/api/v1/inbound-data-connector-service/events",
-        headers: { "Content-Type": "application/json" },
-        data: payload
-      });
-
-      console.log(`[Timeline] posted event ${eventId} for sample ${sample.ID} - status=${resp && resp.status ? resp.status : 'unknown'}`);
-    } catch (err) {
-      console.error('[Timeline] failed to post event for sample', sample && sample.ID, err && (err.stack || err.message || err));
-      // do not reject the original create - just log the error
-    }
-
-    return sample;
-    
-  });
+    });
 ```
 ## Todos
 

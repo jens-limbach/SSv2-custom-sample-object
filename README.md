@@ -1231,7 +1231,7 @@ Your finished custom object has now a new workcenter that can be assiged to user
   });
 ```
 
-## Related Entities Feature
+## Related Entities Feature (Preview - not yet released)
 
 It is possible to link your custom object as a successor or predecessor to your standard objects. This is only a simple configuration and then they will appear as linkable in your standard object under the "Related Entity" section. See screenshots below.
 

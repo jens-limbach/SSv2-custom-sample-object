@@ -1146,6 +1146,8 @@ Your finished custom object has now a new workcenter that can be assiged to user
   };
 ```
 
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/3524c96c9b45c74caa44d78f4751657ef9daa222/images/StatusIcon.png">
+
 ## Timeline Feature
 
 25. Bonus: Enable the timeline feature. There several configuratoin steps involved before the below code will work. You will need to go to your CRM and open the Timeline Configuration, create a new Event, configure the Account to subscribe to this event, create a new Inbound Communication System, then go to Inbound Custom Events, enable the Create event and assign your previous configured Communication System. Then finally you need to adjust the ```package.json``` with the credentials you configured in the communication system. After that you can the following snippet at the end of your ```sample-service.js``` before the last ```});```. If everything was successfull, everytime you create a new "sample" and link it with an account, the particular account will have a new event on his timeline.

@@ -24,6 +24,7 @@ If you want to see less CAP Development and more on how it looks later for the e
 - [Business Logic](#business-logic)
 - [Timeline Feature](#timeline-feature)
 - [Related Entities Feature](#related-entities-feature)
+- [Documentation](#documentation)
 - [ToDos](#ToDos)
 
 ## Pre-requisites

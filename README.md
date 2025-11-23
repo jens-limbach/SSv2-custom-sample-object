@@ -10,7 +10,7 @@ The above video shows very nice all the detailed steps including both the CAP an
 
 If you want to see less CAP Development and more on how it looks later for the end-user I can recommend you to watch this more high level [overview video](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_zptgr1j5) for custom services.
 
-*PS: If you are also interessted in some very basics about extensibility you can also check out my [beginners extensibility workshop](https://github.com/jens-limbach/SSv2-extensibility-workshop) with a guide on mashups and custom code in a cloud function.*
+*PS: If you are also interessted in some very basics about side-by-side extensibility you can also check out my [beginners extensibility workshop](https://github.com/jens-limbach/SSv2-extensibility-workshop) with a guide on mashups and custom code in a cloud function.*
 
 ## Table of Contents
 - [Pre-requisites](#Pre-requisites)
@@ -1230,14 +1230,26 @@ Enable your custom object for related entities:
 Link your custom object to a standard entity:
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/392753605ea2c1c0a94445b8a5d9669e94aeb0b7/images/ConfigureRelatedEntities2.png">
 
+## Documentation
+
+- [How to build a custom service? (this tutorial)](https://github.com/jens-limbach/SSv2-custom-sample-object)
+- [Custom Services Documentation](https://help.sap.com/docs/CX_NG_SVC/56436b4e8fa84dc8b4408c7795a012c4/7cb6b3e19b984d6c9d7f16d0f387e6b0.html)
+- [Metadata Guidelines](https://help.sap.com/docs/CX_NG_SVC/56436b4e8fa84dc8b4408c7795a012c4/cc336c1290e9483994d277d354f34dcb.html)
+- [CAP File Conversion](https://help.sap.com/docs/CX_NG_SVC/56436b4e8fa84dc8b4408c7795a012c4/760adeb672fb42229873e45a6bb379a7.html)
+- [SAP CAP Documentation](https://cap.cloud.sap/docs/)
+- [Timeline Configuration](https://help.sap.com/docs/CX_NG_SALES/ea5ff8b9460a43cb8765a3c07d3421fe/26080206ef8b403183e46fbe8ba5179f.html)
+- [General Extensibility of SAP Sales and Service Cloud](https://help.sap.com/docs/CX_NG_SALES/ea5ff8b9460a43cb8765a3c07d3421fe/90214e2fe20940dd8cd68c25742c4f9b.html)
+- [Jens' Extensibility Workshop for Beginners of Side-by-Side Extensiblity](https://github.com/jens-limbach/SSv2-extensibility-workshop)
+
 ## Todos
 
 Planned Todo's for this Tutorial:
-- End to End Video
+- Update the End to End Video to the latest version
 - Review all the nodeJS code (especially the part with the scalar fields)
 - Add the related entity and document flow topics
 - Add a service for "custom key metrics"
 - Add example for multiple error messages including warnings and info messages
-- Add an example of a custom UI to this tutorial
+- Add an example of a custom UI to create samples from opportunity to this tutorial
+- Add a custom UI as mashup in the sample UI (like some charts)
 - Add more explanations around the connections in package.json and the cloud sdk
-- Link documentation in a seperate section (custom services, metadata guidelines, Github samples etc.)
+- Add few more screenshots to certain sections

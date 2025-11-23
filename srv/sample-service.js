@@ -18,7 +18,7 @@ module.exports = cds.service.impl(async function () {
 
         
         const scalarFields = [
-            'ID', 'createdAt', 'createdBy', 'modifiedAt', 'modifiedBy',
+            'id', 'createdAt', 'createdBy', 'modifiedAt', 'modifiedBy',
             'sampleName', 'sampleType', 'shipToAddress',
             'hazardous', 'hazardousReason', 'dueDate', 'overdueStatusIcon', 'status',
             'packagingHeight', 'packagingWidth', 'packagingMaterial'
@@ -59,8 +59,8 @@ module.exports = cds.service.impl(async function () {
     this.after('UPDATE', Samples, async (result, req) => {  
         console.log('🔥 after(UPDATE) handler triggered!');
         
-        if (!result || !result.ID) {
-            console.log('No result or ID found, returning original result');
+        if (!result || !result.id) {
+            console.log('No result or id found, returning original result');
             return result;
         }
 
@@ -70,9 +70,9 @@ module.exports = cds.service.impl(async function () {
             
             const completeEntity = await cds.run(
                 SELECT.from(Samples)  // ✅ Changed: Sample → Samples
-                    .where({ ID: result.ID })
+                    .where({ id: result.id })
                     .columns([
-                        'ID', 'createdAt', 'createdBy', 'modifiedAt', 'modifiedBy',
+                        'id', 'createdAt', 'createdBy', 'modifiedAt', 'modifiedBy',
                         'sampleName', 'sampleType', 'shipToAddress',
                         'hazardous', 'hazardousReason', 'dueDate', 'overdueStatusIcon', 'status',
                         'packagingHeight', 'packagingWidth', 'packagingMaterial', 
@@ -90,17 +90,17 @@ module.exports = cds.service.impl(async function () {
                 const entity = completeEntity[0];
                 
                 // Enrich with account data using the same logic as after('READ')
-                if (entity.account && entity.account.accountID) {
+                if (entity.account && entity.account.accountId) {
                     try {
                         const accountApi = await cds.connect.to("Account.Service");
                         const accountResponse = await accountApi.send({
                             method: "GET",
-                            path: `/sap/c4c/api/v1/account-service/accounts/${entity.account.accountID}?$select=displayId,id,formattedName`
+                            path: `/sap/c4c/api/v1/account-service/accounts/${entity.account.accountId}?$select=displayId,id,formattedName`
                         });
                         
                         if (accountResponse?.value) {
                             entity.account = {
-                                accountID: accountResponse.value.id,
+                                accountId: accountResponse.value.id,
                                 name: accountResponse.value.formattedName,
                                 displayId: accountResponse.value.displayId
                             };
@@ -111,21 +111,21 @@ module.exports = cds.service.impl(async function () {
                         // Continue without enrichment - account stays as-is
                     }
                 } else {
-                    console.log('No accountID present, skipping account enrichment in PATCH');
+                    console.log('No accountId present, skipping account enrichment in PATCH');
                 }
 
                 // Enrich with product data
-                if (entity.product && entity.product.productID) {
+                if (entity.product && entity.product.productId) {
                     try {
                         const productApi = await cds.connect.to("Product.Service");
                         const productResponse = await productApi.send({
                             method: "GET",
-                            path: `/sap/c4c/api/v1/product-service/products/${entity.product.productID}?$select=displayId,id,name`
+                            path: `/sap/c4c/api/v1/product-service/products/${entity.product.productId}?$select=displayId,id,name`
                         });
                         
                         if (productResponse?.value) {
                             entity.product = {
-                                productID: productResponse.value.id,
+                                productId: productResponse.value.id,
                                 name: productResponse.value.name,
                                 displayId: productResponse.value.displayId
                             };
@@ -136,21 +136,21 @@ module.exports = cds.service.impl(async function () {
                         // Continue without enrichment - product stays as-is
                     }
                 } else {
-                    console.log('No productID present, skipping product enrichment in PATCH');
+                    console.log('No productId present, skipping product enrichment in PATCH');
                 }
 
                 // Enrich with employee data
-                if (entity.employee && entity.employee.employeeID) {
+                if (entity.employee && entity.employee.employeeId) {
                     try {
                         const productApi = await cds.connect.to("Product.Service");
                         const employeeResponse = await productApi.send({
                             method: "GET",
-                            path: `/sap/c4c/api/v1/employee-service/employees/${entity.employee.employeeID}?$select=displayId,id,formattedName`
+                            path: `/sap/c4c/api/v1/employee-service/employees/${entity.employee.employeeId}?$select=displayId,id,formattedName`
                         });
                         
                         if (employeeResponse?.value) {
                             entity.employee = {
-                                employeeID: employeeResponse.value.id,
+                                employeeId: employeeResponse.value.id,
                                 name: employeeResponse.value.formattedName,
                                 displayId: employeeResponse.value.displayId
                             };
@@ -161,7 +161,7 @@ module.exports = cds.service.impl(async function () {
                         // Continue without enrichment - employee stays as-is
                     }
                 } else {
-                    console.log('No employeeID present, skipping employee enrichment in PATCH');
+                    console.log('No employeeId present, skipping employee enrichment in PATCH');
                 }
                 
                 return entity;
@@ -188,13 +188,13 @@ module.exports = cds.service.impl(async function () {
             const accountRequestList = [];
             const accountSampleIndexMap = []; // Track which samples have accounts
 
-            // forming batch call - only for samples that have accountID
+            // forming batch call - only for samples that have accountId
             samples?.forEach((sa, index) => {  
-                if (!(sa.account && sa.account.accountID)) {
-                    console.log(`Sample at index ${index} has no accountID, skipping account enrichment`);
+                if (!(sa.account && sa.account.accountId)) {
+                    console.log(`Sample at index ${index} has no accountId, skipping account enrichment`);
                     return;
                 }
-                let accountCnsEndPoint = `/sap/c4c/api/v1/account-service/accounts/${sa.account.accountID}?$select=displayId,id,formattedName`;
+                let accountCnsEndPoint = `/sap/c4c/api/v1/account-service/accounts/${sa.account.accountId}?$select=displayId,id,formattedName`;
                 accountRequestList.push({
                     "id": 'accountCns_' + accountRequestList.length,
                     "url": accountCnsEndPoint,
@@ -221,7 +221,7 @@ module.exports = cds.service.impl(async function () {
                         if (eachAccDtl?.body?.value) {
                             const originalSampleIndex = accountSampleIndexMap[batchIndex];
                             samples[originalSampleIndex]['account'] = { 
-                                accountID: eachAccDtl.body.value.id,
+                                accountId: eachAccDtl.body.value.id,
                                 name: eachAccDtl.body.value.formattedName,
                                 displayId: eachAccDtl.body.value.displayId
                             };
@@ -240,13 +240,13 @@ module.exports = cds.service.impl(async function () {
             const productRequestList = [];
             const productSampleIndexMap = []; // Track which samples have products
 
-            // forming batch call - only for samples that have productID
+            // forming batch call - only for samples that have productId
             samples?.forEach((sa, index) => {  
-                if (!(sa.product && sa.product.productID)) {
-                    console.log(`Sample at index ${index} has no productID, skipping product enrichment`);
+                if (!(sa.product && sa.product.productId)) {
+                    console.log(`Sample at index ${index} has no productId, skipping product enrichment`);
                     return;
                 }
-                let productCnsEndPoint = `/sap/c4c/api/v1/product-service/products/${sa.product.productID}?$select=displayId,id,name`;
+                let productCnsEndPoint = `/sap/c4c/api/v1/product-service/products/${sa.product.productId}?$select=displayId,id,name`;
                 productRequestList.push({
                     "id": 'productCns_' + productRequestList.length,
                     "url": productCnsEndPoint,
@@ -273,7 +273,7 @@ module.exports = cds.service.impl(async function () {
                         if (eachProdDtl?.body?.value) {
                             const originalSampleIndex = productSampleIndexMap[batchIndex];
                             samples[originalSampleIndex]['product'] = { 
-                                productID: eachProdDtl.body.value.id,
+                                productId: eachProdDtl.body.value.id,
                                 name: eachProdDtl.body.value.name,
                                 displayId: eachProdDtl.body.value.displayId
                             };
@@ -291,13 +291,13 @@ module.exports = cds.service.impl(async function () {
             const employeeRequestList = [];
             const employeeSampleIndexMap = []; // Track which samples have employees
 
-            // forming batch call - only for samples that have employeeID
+            // forming batch call - only for samples that have employeeId
             samples?.forEach((sa, index) => {  
-                if (!(sa.employee && sa.employee.employeeID)) {
-                    console.log(`Sample at index ${index} has no employeeID, skipping employee enrichment`);
+                if (!(sa.employee && sa.employee.employeeId)) {
+                    console.log(`Sample at index ${index} has no employeeId, skipping employee enrichment`);
                     return;
                 }
-                let employeeCnsEndPoint = `/sap/c4c/api/v1/employee-service/employees/${sa.employee.employeeID}?$select=displayId,id,formattedName`;
+                let employeeCnsEndPoint = `/sap/c4c/api/v1/employee-service/employees/${sa.employee.employeeId}?$select=displayId,id,formattedName`;
                 employeeRequestList.push({
                     "id": 'employeeCns_' + employeeRequestList.length,
                     "url": employeeCnsEndPoint,
@@ -324,7 +324,7 @@ module.exports = cds.service.impl(async function () {
                         if (eachEmpDtl?.body?.value) {
                             const originalSampleIndex = employeeSampleIndexMap[batchIndex];
                             samples[originalSampleIndex]['employee'] = { 
-                                employeeID: eachEmpDtl.body.value.id,
+                                employeeId: eachEmpDtl.body.value.id,
                                 name: eachEmpDtl.body.value.formattedName,
                                 displayId: eachEmpDtl.body.value.displayId
                             };
@@ -357,18 +357,16 @@ module.exports = cds.service.impl(async function () {
             return req.reject(400, 'Number of Samples must be greater than zero');
         }
 
-        // Append "X" to sampleName if dueDate is provided and later than today.
-        // If dueDate is not later than today remove trailing "X".
-        // (Only modifies sampleName when sampleName is part of the request.)
-        if (d.dueDate && d.sampleName) {
+        // Set overdueStatusIcon based on dueDate comparison
+        if (d.dueDate) {
             const due = new Date(d.dueDate);
             const today = new Date();
             today.setHours(0,0,0,0);
             due.setHours(0,0,0,0);
-            if (due < today && !d.sampleName.endsWith(' 🔴')) {
-                d.sampleName = `${d.sampleName} 🔴`;
-            } else if (due >= today && d.sampleName.endsWith(' 🔴')) {
-                d.sampleName = d.sampleName.slice(0, -2);
+            if (due < today) {
+                d.overdueStatusIcon = '🔴';
+            } else {
+                d.overdueStatusIcon = '🟢';
             }
         }
     });
@@ -380,7 +378,7 @@ module.exports = cds.service.impl(async function () {
         // Sending Timeline event - requires prior configuration in the CRM system
         try {
             // Check if account exists before proceeding
-            if (!sample.account || !sample.account.accountID) {
+            if (!sample.account || !sample.account.accountId) {
                 console.log("⚠️ No account data present, skipping Timeline event");
                 return; // Skip timeline event if no account
             }
@@ -389,7 +387,7 @@ module.exports = cds.service.impl(async function () {
             const randomUUID = crypto.randomUUID();
             const payload = {
                 "id": randomUUID,
-                "subject": sample.ID,
+                "subject": sample.id,
                 "type": "customer.ssc.sampleservice.event.SampleCreate",
                 "specversion": "0.2",
                 "source": "614cd785fe86ec5c905b4a00",
@@ -397,11 +395,11 @@ module.exports = cds.service.impl(async function () {
                 "datacontenttype": "application/json",
                 "data": {
                     "currentImage": {
-                        "ID": sample.ID,
+                        "id": sample.id,
                         "sampleName": sample.sampleName,
                         "status": sample.status,
                         "account": {
-                            "accountID": sample.account.accountID
+                            "accountId": sample.account.accountId
                         }
                     }
                 }

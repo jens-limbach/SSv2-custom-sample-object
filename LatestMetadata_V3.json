@@ -17,8 +17,8 @@
       "updatable": false,
       "attributes": [
         {
-          "name": "ID",
-          "label": "ID",
+          "name": "id",
+          "label": "id",
           "dataType": "STRING",
           "keyType": "PRIMARY",
           "dataFormat": "UUID",
@@ -295,7 +295,7 @@
           "sortable": false,
           "objectDefinition": [
             {
-              "name": "productID",
+              "name": "productId",
               "dataType": "STRING",
               "dataFormat": "UUID",
               "creatable": false,
@@ -303,7 +303,7 @@
               "nullable": true,
               "sortable": false,
               "filterable": false,
-              "label": "product productID",
+              "label": "product productId",
               "descriptionAttribute": "name",
               "keyType": "FOREIGN",
               "objectReference": {
@@ -359,7 +359,7 @@
           "sortable": false,
           "objectDefinition": [
             {
-              "name": "accountID",
+              "name": "accountId",
               "dataType": "STRING",
               "dataFormat": "UUID",
               "creatable": true,
@@ -367,7 +367,7 @@
               "nullable": true,
               "sortable": false,
               "filterable": false,
-              "label": "account accountID",
+              "label": "account accountId",
               "descriptionAttribute": "name",
               "keyType": "FOREIGN",
               "objectReference": {
@@ -423,7 +423,7 @@
           "sortable": false,
           "objectDefinition": [
             {
-              "name": "employeeID",
+              "name": "employeeId",
               "dataType": "STRING",
               "dataFormat": "UUID",
               "creatable": true,
@@ -431,7 +431,7 @@
               "nullable": true,
               "sortable": false,
               "filterable": false,
-              "label": "employee employeeID",
+              "label": "employee employeeId",
               "descriptionAttribute": "name",
               "keyType": "FOREIGN",
               "objectReference": {
@@ -487,7 +487,7 @@
           "sortable": false,
           "objectDefinition": [
             {
-              "name": "ID",
+              "name": "id",
               "dataType": "STRING",
               "dataFormat": "UUID",
               "creatable": false,
@@ -495,18 +495,18 @@
               "nullable": true,
               "sortable": false,
               "filterable": false,
-              "label": "opportunity ID",
+              "label": "opportunity id",
               "keyType": "FOREIGN",
               "objectReference": {
                 "associationType": "ASSOCIATION",
                 "targetEntity": "Opportunity",
-                "targetAttribute": "ID",
+                "targetAttribute": "id",
                 "keyGroup": "opportunity",
                 "targetService": "Sample"
               }
             },
             {
-              "name": "opportunityID",
+              "name": "opportunityId",
               "dataType": "STRING",
               "dataFormat": "UUID",
               "creatable": false,
@@ -514,10 +514,10 @@
               "nullable": true,
               "sortable": false,
               "filterable": false,
-              "label": "opportunity opportunityID",
+              "label": "opportunity opportunityId",
               "objectReference": {
                 "associationType": "REFERENCE",
-                "targetAttribute": "opportunityID",
+                "targetAttribute": "opportunityId",
                 "keyGroup": "opportunity"
               }
             },
@@ -567,7 +567,7 @@
           "sortable": false,
           "objectDefinition": [
             {
-              "name": "ID",
+              "name": "id",
               "dataType": "STRING",
               "dataFormat": "UUID",
               "creatable": false,
@@ -575,18 +575,18 @@
               "nullable": true,
               "sortable": false,
               "filterable": false,
-              "label": "serviceCase ID",
+              "label": "serviceCase id",
               "keyType": "FOREIGN",
               "objectReference": {
                 "associationType": "ASSOCIATION",
                 "targetEntity": "ServiceCase",
-                "targetAttribute": "ID",
+                "targetAttribute": "id",
                 "keyGroup": "serviceCase",
                 "targetService": "Sample"
               }
             },
             {
-              "name": "serviceCaseID",
+              "name": "serviceCaseId",
               "dataType": "STRING",
               "dataFormat": "UUID",
               "creatable": false,
@@ -594,10 +594,10 @@
               "nullable": true,
               "sortable": false,
               "filterable": false,
-              "label": "serviceCase serviceCaseID",
+              "label": "serviceCase serviceCaseId",
               "objectReference": {
                 "associationType": "REFERENCE",
-                "targetAttribute": "serviceCaseID",
+                "targetAttribute": "serviceCaseId",
                 "keyGroup": "serviceCase"
               }
             },
@@ -672,8 +672,8 @@
       "updatable": false,
       "attributes": [
         {
-          "name": "ID",
-          "label": "ID",
+          "name": "id",
+          "label": "id",
           "dataType": "STRING",
           "keyType": "PRIMARY",
           "dataFormat": "UUID",

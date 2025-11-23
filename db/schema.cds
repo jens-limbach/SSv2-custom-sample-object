@@ -4,7 +4,7 @@ using {managed} from '@sap/cds/common';
 
 @isRootEntity : true
 entity Sample : managed {
-    key ID                : UUID;
+    key id                : UUID;
 
         @description
         sampleName        : String(255); // Descrptive name of the sample
@@ -34,20 +34,20 @@ entity Sample : managed {
         employee          : Composition of one Employee;
         opportunity       : Composition of one Opportunity;
         serviceCase       : Composition of one ServiceCase;
-        notes             : Composition of many Note on notes.sampleID = ID;
+        notes             : Composition of many Note on notes.sampleId = id;
 }
 
 // Structured data type for Amount and Quantity
 @isCnsEntity: true
 entity Amount {
-    key ID           : UUID;
+    key id           : UUID;
         currencyCode : String;
         content      : Decimal(10, 2);
 }
 
 @isCnsEntity: true
 entity Quantity {
-    key ID        : UUID;
+    key id        : UUID;
     content       : Integer;
     uomCode       : String; // Unit of Measure Code
 }
@@ -74,49 +74,49 @@ type SampleCodeType    : String @assert.range enum {
 
 // New Notes sub-entity
 entity Note : managed {
-    key ID   : UUID;
-        note : String(1000);
-        sampleID : UUID;  // Foreign key to Sample
+    key id       : UUID;
+        note     : String(1000);
+        sampleId : UUID;  // Foreign key to Sample
 }
 
 // Associated CRM entities
 
 @isCnsEntity: true
 entity Product {
-    key ID                : UUID;
-        productID         : UUID;
+    key id                : UUID;
+        productId         : UUID;
         displayId         : String;
         @description name : String(255);
 }
 
 @isCnsEntity: true
 entity Account {
-    key ID                : UUID;
-        accountID         : UUID;
+    key id                : UUID;
+        accountId         : UUID;
         displayId         : String;
         @description name : String(255);
 }
 
 @isCnsEntity: true
 entity Opportunity {
-    key ID                : UUID;
-        opportunityID     : UUID;
+    key id                : UUID;
+        opportunityId     : UUID;
         displayId         : String;
         @description name : String(255);
 }
 
 @isCnsEntity: true
 entity ServiceCase {
-    key ID                : UUID;
-        serviceCaseID     : UUID;
+    key id                : UUID;
+        serviceCaseId     : UUID;
         displayId         : String;
         @description name : String(255);
 }
 
 @isCnsEntity: true
 entity Employee {
-    key ID                : UUID;
-        employeeID        : UUID;
+    key id                : UUID;
+        employeeId        : UUID;
         displayId         : String;
         @description name : String(255);
 }

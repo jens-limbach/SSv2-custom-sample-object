@@ -248,7 +248,7 @@ You can use for the first test a very simple payload like:
 }
 ```
 
-9. Before we deploy  we need to adjust a few more configuration files. Adjust the ```app/router/xs-app.json``` by adding CORS exceptions (for your tenant) and adjust authMethod=none -> Snippet 4 and 5
+9. Before we deploy  we need to adjust a few more configuration files. Adjust the ```app/router/xs-app.json``` by adding CORS exceptions (for your tenant) and specify that we do not use authentication for now. Don't forget to replace ```YOURTENANT.de1.demo.crm.cloud.sap``` with your own tenant -> Snippet 4 and 5
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/xs-app-json.png">
  

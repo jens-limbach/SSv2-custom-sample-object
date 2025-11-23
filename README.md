@@ -39,6 +39,12 @@ Hint: We will be using SAP CAP (Cloud Application Programming Model) for our bac
 
 ## Getting Started
 
+The business scenario which this extension example is designed evolves around a sample process. Many companies send out samples before they make a large contract. In our case we want to have a "sample object" which helps us to cover all related data around a sample including the link to standard master entities like a product, account or employee. But also transactional entities like having samples as part of an opportunty or maybe opening a service case linked to a faulty sample. It is a good example to explain the key features around custom services. Just in reality, I would try to solve a "sample process" with a "sample order" follow-up as much in standard as possible. ;)
+
+At the end of the tutorial you will have a comprehensive custom object, with a fully generated UI, authorization features, seamless embedded in the standard application, stored in a hana db (or any db of your choice) and a powerful backend where you can place any custom code you need in whatever programming language you want to use. In our example we use NodeJS and SAP CAP (Cloud Application Programming Model) for that backend.
+
+<img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/392753605ea2c1c0a94445b8a5d9669e94aeb0b7/images/FinishedSample.png">
+
 Important: If you try this out with several colleagues on the same BTP, please make sure you replace the suffix "JL" with your initials to make it unique.
 
 1.	Open VSCode and the terminal

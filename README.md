@@ -47,6 +47,8 @@ At the end of the tutorial you will have a comprehensive custom object, with a f
 
 Important: If you try this out with several colleagues on the same BTP, please make sure you replace the suffix "JL" with your initials to make it unique.
 
+But now let's really get started to create your project!
+
 1.	Open VSCode and the terminal
 2.	Enter in the terminal ```cds init SampleJL```
 3.	Enter in the terminal  ```code SampleJL``` (on windows at least this opens the project in visual code :P)

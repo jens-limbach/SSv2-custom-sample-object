@@ -6,6 +6,17 @@ module.exports = cds.service.impl(async function () {
 
     const { Samples } = this.entities;  // ✅ Changed: Sample → Samples
 
+    // Shared function to determine overdue status
+    const determineOverdueStatus = (data) => {
+        if (data.dueDate) {
+            const due = new Date(data.dueDate);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            due.setHours(0,0,0,0);
+            data.overdueStatusIcon = due < today ? '🔴' : '🟢';
+        }
+    };
+
     // Before Read to expand costOfSample and account safely
     this.before('READ', Samples, (req) => { 
         const sel = req.query && req.query.SELECT;
@@ -357,18 +368,16 @@ module.exports = cds.service.impl(async function () {
             return req.reject(400, 'Number of Samples must be greater than zero');
         }
 
-        // Set overdueStatusIcon based on dueDate comparison
-        if (d.dueDate) {
-            const due = new Date(d.dueDate);
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            due.setHours(0,0,0,0);
-            if (due < today) {
-                d.overdueStatusIcon = '🔴';
-            } else {
-                d.overdueStatusIcon = '🟢';
-            }
-        }
+        // Function to determine overdue status
+        determineOverdueStatus(d);
+    });
+
+    // Before UPDATE logic
+    this.before('UPDATE', Samples, (req) => {
+        const d = req.data || {};
+
+        // Function to determine overdue status
+        determineOverdueStatus(d);
     });
 
     

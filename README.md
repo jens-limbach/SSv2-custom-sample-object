@@ -36,7 +36,9 @@ Warning: SAP temporarly disabled cloud foundry deployments on BTP which means yo
 - You have enabled the Custom Services feature for creating new entities in your SAP Sales and Service Cloud V2
 - You are a little bit familiar with coding or curious enough to get into it :)
 
-Hint: We will be using SAP CAP (Cloud Application Programming Model) for our backend, you can read more about it here: <a href="https://cap.cloud.sap/docs/get-started/" target="_blank">CAP Documentation</a>
+*Hint 1:* We will be using SAP CAP (Cloud Application Programming Model) for our backend, you can read more about it here: <a href="https://cap.cloud.sap/docs/get-started/" target="_blank">CAP Documentation</a>
+
+*Hint 2:* If you are already an expert, you can also just clone my entire repository locally and skip most of the steps but I recommend everyone to build the project step by step to understand what is happening. If you clone it, you need to re-name the ```package.json.example``` to just ```package.json``` and insert your own credentials and you also need to adjust some of the other parameters from below (like db name, CORS whitelisting etc.).
 
 ## Getting Started
 
@@ -46,7 +48,7 @@ At the end of the tutorial you will have a comprehensive custom object, with a f
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/392753605ea2c1c0a94445b8a5d9669e94aeb0b7/images/FinishedSample.png">
 
-Important: If you try this out with several colleagues on the same BTP, please make sure you replace the suffix "JL" with your initials to make it unique.
+*Important:* If you try this out with several colleagues on the same BTP, please make sure you replace the suffix "JL" with your initials to make it unique.
 
 But now let's really get started to create your project!
 

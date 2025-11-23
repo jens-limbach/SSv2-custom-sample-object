@@ -1,0 +1,104 @@
+{
+  "name": "SampleJL",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js/hana": "^2",
+    "@sap-cloud-sdk/http-client": "^4.1.2",
+    "@sap-cloud-sdk/resilience": "^4.1.2",
+    "@sap/cds": "^9",
+    "@sap/xssec": "^4",
+    "express": "^4"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@cap-js/cds-types": "^0.13.0",
+    "@cap-js/sqlite": "^2",
+    "@sap/cds-dk": ">=8"
+  },
+  "scripts": {
+    "start": "cds-serve"
+  },
+  "cds": {
+    "requires": {
+      "[production]": {
+        "db": "hana",
+        "auth": "mocked"
+      },
+      "auth": "mocked",
+      "Account.Service": {
+        "kind": "rest",
+        "[production]": {
+          "credentials": {
+            "url": "https://YOUR-TENANT.de1.demo.crm.cloud.sap",
+            "username": "YourUser",
+            "password": "YourPassword"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "url": "https://YOUR-TENANT.de1.demo.crm.cloud.sap",
+            "username": "YourUser",
+            "password": "YourPassword"
+          }
+        }
+      },
+      "Product.Service": {
+        "kind": "rest",
+        "[production]": {
+          "credentials": {
+            "url": "https://YOUR-TENANT.de1.demo.crm.cloud.sap",
+            "username": "YourUser",
+            "password": "YourPassword"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "url": "https://YOUR-TENANT.de1.demo.crm.cloud.sap",
+            "username": "YourUser",
+            "password": "YourPassword"
+          }
+        }
+      },
+      "Employee.Service": {
+        "kind": "rest",
+        "[production]": {
+          "credentials": {
+            "url": "https://YOUR-TENANT.de1.demo.crm.cloud.sap",
+            "username": "YourUser",
+            "password": "YourPassword"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "url": "https://YOUR-TENANT.de1.demo.crm.cloud.sap",
+            "username": "YourUser",
+            "password": "YourPassword"
+          }
+        }
+      },
+      "Timeline.Service": {
+        "kind": "rest",
+        "[production]": {
+          "credentials": {
+            "url": "https://YOUR-TENANT.de1.demo.crm.cloud.sap",
+            "username": "YourCommunicationUser",
+            "password": "YourPassword"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "url": "https://YOUR-TENANT.de1.demo.crm.cloud.sap",
+            "username": "YourCommunicationUser",
+            "password": "YourPassword"
+          }
+        }
+      }
+    }
+  }
+}

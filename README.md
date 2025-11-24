@@ -14,6 +14,7 @@ If you want to see less CAP Development and more on how it looks later for the e
 
 ## Table of Contents
 - [Pre-requisites](#Pre-requisites)
+- [Business Scenario](#business-scenario)
 - [Getting Started](#getting-started)
 - [Data Model and Service](#data-model-and-service)
 - [Configuration](#configuration)
@@ -29,18 +30,18 @@ If you want to see less CAP Development and more on how it looks later for the e
 
 ## Pre-requisites
 
-- You have a BTP sub-account and access to Cloud Foundry (you can use a free <a href="https://account.hanatrial.ondemand.com/" target="_blank">BTP Trial</a>)
-Warning: SAP temporarly disabled cloud foundry deployments on BTP which means you need a proper BTP sub-account at the moment.
+- You have a BTP sub-account and access to Cloud Foundry.
+*Warning: SAP temporarly disabled cloud foundry deployments on <a href="https://account.hanatrial.ondemand.com/" target="_blank">BTP Trials</a> which means you need a proper BTP sub-account at the moment.*
 - You have setup a Hana Cloud on your BTP Sub-Account (take a look [here](https://github.com/jens-limbach/SSv2-extensibility-workshop/blob/main/hana-setup.md) for the basic steps needed)
-- You have setup VSCode and done the initial setup for CAP
-- You have enabled the Custom Services feature for creating new entities in your SAP Sales and Service Cloud V2
+- You have installed VSCode and done the <a href="https://cap.cloud.sap/docs/get-started/#prerequisites" target="_blank">initial setup for CAP</a> (Node.js installed and cds tool kit installed via ```npm add -g @sap/cds-dk```)
+- You have access to the Custom Services feature for creating new entities in your SAP Sales and Service Cloud V2
 - You are a little bit familiar with coding or curious enough to get into it :)
 
 *Hint 1:* We will be using SAP CAP (Cloud Application Programming Model) for our backend, you can read more about it here: <a href="https://cap.cloud.sap/docs/get-started/" target="_blank">CAP Documentation</a>
 
 *Hint 2:* If you are already an expert, you can also just clone my entire repository locally and skip most of the steps but I recommend everyone to build the project step by step to understand what is happening. If you clone it, you need to re-name the ```package.json.example``` to just ```package.json``` and insert your own credentials and you also need to adjust some of the other parameters from below (like db name, CORS whitelisting etc.).
 
-## Getting Started
+## Business Scenario
 
 The business scenario which this extension example is designed evolves around a sample process. Many companies send out samples before they make a large contract. In our case we want to have a "sample object" which helps us to cover all related data around a sample including the link to standard master entities like a product, account or employee. But also transactional entities like having samples as part of an opportunty or maybe opening a service case linked to a faulty sample. It is a good example to explain the key features around custom services. Just in reality, I would try to solve a "sample process" with a "sample order" follow-up as much in standard as possible. ;)
 
@@ -48,17 +49,19 @@ At the end of the tutorial you will have a comprehensive custom object, with a f
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/392753605ea2c1c0a94445b8a5d9669e94aeb0b7/images/FinishedSample.png">
 
+## Getting Started
+
 *Important:* If you try this out with several colleagues on the same BTP, please make sure you replace the suffix "JL" with your initials to make it unique.
 
 But now let's really get started to create your project!
 
-1.	Open VSCode and the terminal
-2.	Enter in the terminal ```cds init SampleJL```
-3.	Enter in the terminal  ```code SampleJL``` (on windows at least this opens the project in visual code :P)
+1.	Open your VSCode and the terminal
+2.	Enter in the terminal ```cds init SampleJL``` to initialize your CAP project
+3.	Enter in the terminal  ```code SampleJL``` to open your project (on windows at least this opens the project in visual code :P). You can also just open the folder with VSCode.
 
 ## Data Model and Service
 
-4.	Create ```schema.cds``` file with your entity in the db folder -> Snippet 1
+4.	Create ```schema.cds``` file with your entity in the ```db``` folder -> Snippet 1
 
 Snippet 1:
 ```
@@ -186,7 +189,7 @@ entity Employee {
 }
 ```
 
-5.	Create ```sample-service.cds``` file in the srv folder with your service definition -> Snippet 2
+5.	Create ```sample-service.cds``` file in the ```srv``` folder with your service definition -> Snippet 2
 
 Snippet 2:
 ```
@@ -207,7 +210,7 @@ service SampleService @(path: '/sample-service') {
 ```
 ## Configuration
 
-6.	Enter in the terminal to add some additional features to our project:
+6.	Open the terminal and use the following commands to add some additional features to our project:
    
 ```cds add hana```
 
@@ -217,9 +220,9 @@ service SampleService @(path: '/sample-service') {
 
 ```cds add approuter```
 
-7.	Adapt some files manually…
+7.	Now we need to adapt some files manually.
 
--> Adjust the ```package.json``` (overwrite the cds section by changing auth to mocked and adding the hana db) -> Snippet 3
+-> Adjust the ```package.json``` (replace the entire cds section by changing auth to mocked and adding the hana db) -> Snippet 3
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/package-json.png">
  
@@ -244,7 +247,7 @@ Snippet 3:
 - Then start your web server locally:
 ```cds watch```
 
-- If you follow the given link in the terminal you will be re-directed to a website running locally. When you click on the service endpoint for the samples you will see the result of a GET request. Currently we have no data thats why it looks quite empty.
+- The terminal will provide you a link to your localhost. If you follow the given link you will be re-directed to a website running locally. When you click on the service endpoint for the samples you will see the result of a GET request. Currently we have no data thats why it looks quite empty.
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/e44362235393c3c60460ee9e5d3f20be74af2cdc/images/cds%20server%20preview.png">
 
 If you want you can also send with any tool  POST request to the same endpoint and try out how it feels to create new samples in your local database via your newly created backend. This is the endpoint of your "local" backend: <a href="http://localhost:4004/sample-service/Sample" target="_blank">http://localhost:4004/sample-service/Sample</a>
@@ -258,6 +261,8 @@ You can use for the first test a very simple payload like:
             "shipToAddress": "some address"
 }
 ```
+
+If you do another GET after that POST you will see that data is stored in your local backend.
 
 9. Before we deploy  we need to adjust a few more configuration files. Adjust the ```app/router/xs-app.json``` by adding CORS exceptions (for your tenant) and specify that we do not use authentication for now. Don't forget to replace ```YOURTENANT.de1.demo.crm.cloud.sap``` with your own tenant -> Snippet 4 and 5
 
@@ -326,7 +331,7 @@ Snippet 5:
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/2bafe55a3a0705af6d20373558da1dce293f782a/images/mta-yaml.png">
 
--> In case your BTP subaccount has spaces in it’s name: adjust the ```xsappname: SampleJL``` in your ```mta.yaml``` by removing the generated placeholders for subaccount and space.
+-> In case your BTP subaccount has "spaces" in it’s name my recommendation is to adjust the ```xsappname: SampleJL``` in your ```mta.yaml``` by removing the generated placeholders for subaccount and space as weird subaccount names can lead to issues.
 
 -> Add 256M memory to all your services in ```mta.yaml``` to save some dev space
 ```
@@ -758,7 +763,7 @@ module.exports = cds.service.impl(async function () {
 });
 ```
 
-12. Add to your ```package.json``` the below directly into the cds production section. We need to add some credentials. You need to replace your tenant and credentials in the below code. Normally you would use BTP destinations here but this way we "save" a step.
+12. Add to your ```package.json``` the below code directly into the cds production section. We need to add some credentials. You need to replace your tenant and credentials in the below code. Normally you would use BTP destinations here but this way we "save" a step.
 
 After exactly the last curly bracket here:
 ```
@@ -769,7 +774,7 @@ After exactly the last curly bracket here:
         "auth": "mocked"
       }
 ```
-You must add that here and overwrite all the curly brackets at the end:
+You must add the below code and overwrite all the curly brackets at the end:
 ```
 ,
       "auth": "mocked",
@@ -847,7 +852,7 @@ You must add that here and overwrite all the curly brackets at the end:
 ```
 ## Deployment
 
-13.	Enter in your terminal
+13.	Let's deploy our application now to Cloud Foundry. Enter in your terminal:
 
 ```npm install @sap-cloud-sdk/http-client @sap-cloud-sdk/resilience -save```
 
@@ -859,20 +864,24 @@ You must add that here and overwrite all the curly brackets at the end:
 
 ```cf deploy mta_file```
 
-14.	Copy the app router url and try out your backend service via your browswer or any tool like "Bruno" or "Postman".
+14.	Copy the app router url and try out your backend service via your browswer or any tool like "Bruno" or "Postman". Important: Do not use the "service" url but use the "application" url which is usually the second one given in the terminal.
 
 ## Metadata
 
-15.	Enter in the terminal ```cds -2 json .\srv\Sample-service.cds > BackendService.json``` and copy the json into a new file.
+15. Recommendation: Just download directly my provided and finished [metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata_V3.json) here and jump directly to [UI Generation and Testing](#ui-generation-and-testing).
 
-16.	Go to your SAP Sales and Service Cloud solution. Navigate via System Settings to your Custom Services feature. Create a new custom service entity, and open th CAP json converter, convert the "BackendService.json"  file and download the new metadata json file. 
+Normally you would need to generate a json, convert it, edit it and only then upload it. But most of these manual adjustiments will disappear as the CAP conversion is currently undergoing a huge improvement. But anyway if you want to learn the steps for your own project, here are the steps you need to do if you want to go through this manual exercise otherwise use above file and continue with [UI Generation and Testing](#ui-generation-and-testing).
 
-17. Recommendation: Just download directly the finished metadata file here and continue with the next step instead: [Latest Metadata file](https://github.com/jens-limbach/SSv2-custom-sample-object/blob/main/LatestMetadata_V3.json). This file you can directly upload in your new custom service.
+Manual Steps:
 
-Normally you would need to edit the downloaded metadata file a bit and make the some adjustments like the ones below. But most of these will disappear as the CAP conversion is currently undergoing a huge improvement. Here are the steps you need to do if you want to go through this manual exercise:
+15.	Enter in the terminal ```cds -2 json .\srv\Sample-service.cds > BackendService.json``` to generate a json file based on your backend.
+
+16.	Go to your SAP Sales and Service Cloud solution. Navigate via System Settings to your Custom Services feature. Create a new custom service entity, open th CAP json converter, convert the "BackendService.json"  file previously created and download the new metadata json file. 
+
+Now do the following adjustments:
+
 -   Add a unique object type code ```"objectTypeCode": "CUS1329",``` on your entity level 
 -   Add a label on the top entity level ```"label": "Samples",```
--   Make sure that your name on service definition level (very top) is unique in your tenant ```"name": "SampleV3",```
 -   Replace all ```"dataType": "COMPOSITION",``` with ```"dataType": "OBJECT",```
 -   Add a notes api manually
 -   Make sure the entityReference is referencing your Entity name which is generated based on the service definition. In my case I need to add an "s" as the generator only generated "Sample" in singular. So add to all three events an "s" so that it looks like this:
@@ -889,17 +898,17 @@ Normally you would need to edit the downloaded metadata file a bit and make the 
 
 For Account:
 1. Remove the generated "ID" field (which only holds the CAP internal ID)
-2. Add to the accountID field the following attributes:
+2. Add to the "accountId" field the following attributes:
 ```
               "descriptionAttribute": "name",
               "keyType": "FOREIGN",
 ```
-3. Change the following attributes of the accountID to true:
+3. Change the following attributes of the "accountId" to true:
 ```
               "creatable": true,
               "updatable": true,
 ```
-4. Complete the objectReference section of the accountID like given below:
+4. Complete the objectReference section of the "accountId" like given below:
 ```
 "objectReference": {
     "targetAttribute": "id",
@@ -949,7 +958,7 @@ not yet supported - coming soon
     "targetService": "sap.ssc.service.i18nService"
 ```
 
--   Make the notes "creatable" and "updatable", remove admin fields and add manually the API for the sub-structure "Notes" in the api section directly after the "Samples" API definition
+-   Make the notes "creatable" and "updatable", remove admin fields (createdAt, modifiedAt, createdBy, modifiedBy) and add manually the API for the sub-structure "Notes" in the api section directly after the "Samples" API definition
 
 Change your "note" field on your notes structure to creatable and updatable : true
 ```
@@ -1056,11 +1065,11 @@ Add the needed API part:
         },
         {
           "id": "updateNote",
-          "path": "/{noteID}",
+          "path": "/{noteId}",
           "method": "PATCH",
           "request": {
             "pathVariables": [
-              { "name": "noteID", "dataType": "STRING", "dataFormat": "UUID" }
+              { "name": "noteId", "dataType": "STRING", "dataFormat": "UUID" }
             ]
           },
           "responses": [
@@ -1118,6 +1127,8 @@ Your finished custom object has now a new workcenter that can be assiged to user
 
 ## Business Logic
 
+Let's also add some more business logic. Until now we only had logic that is required as a baseline for our service. Much more interesting is how easy it is to add some logic in different lifecycle points like before creation or before update.
+
 23. Validation: Let's add a simple validation to the sample request on create. We want to check that the "number of samples" cannot be 0. Add the following snippet at the end of your ```sample-service.js``` before the last ```});```.
 ```
   // Before CREATE (only for root Sample entity)
@@ -1161,7 +1172,7 @@ Your finished custom object has now a new workcenter that can be assiged to user
 
 ## Timeline Feature
 
-25. Bonus: Enable the timeline feature. There several configuratoin steps involved before the below code will work. You will need to go to your CRM and open the Timeline Configuration, create a new Event, configure the Account to subscribe to this event, create a new Inbound Communication System, then go to Inbound Custom Events, enable the Create event and assign your previous configured Communication System. Then finally you need to adjust the ```package.json``` with the credentials you configured in the communication system. After that you can the following snippet at the end of your ```sample-service.js``` before the last ```});```. If everything was successfull, everytime you create a new "sample" and link it with an account, the particular account will have a new event on his timeline.
+25. Enable the timeline feature. There several configuratoin steps involved before the below code will work. You will need to go to your CRM and open the Timeline Configuration, create a new Event, configure the Account to subscribe to this event, create a new Inbound Communication System, then go to Inbound Custom Events, enable the Create event and assign your previous configured Communication System. Then finally you need to adjust the ```package.json``` with the credentials you configured in the communication system. After that you can the following snippet at the end of your ```sample-service.js``` before the last ```});```. If everything was successfull, everytime you create a new "sample" and link it with an account, the particular account will have a new event on his timeline.
 
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/aebf54ee44f6043978ead358090596f8f991650c/images/TimelineEvent.png">
 

@@ -1252,6 +1252,10 @@ Enable your custom object for related entities:
 Link your custom object to a standard entity:
 <img src="https://raw.githubusercontent.com/jens-limbach/SSv2-extensibility-workshop/392753605ea2c1c0a94445b8a5d9669e94aeb0b7/images/ConfigureRelatedEntities2.png">
 
+## Custom Frontend build with AI
+
+Now we have a great generated frontend in our standard solution already but often you can have the biggest business impact by developing a very tailored feature especially on the frontend side. Today this is very quickly done and especially having an enterprise ready backend, it is just adding the cherry on the top. In the following Github I created as a non-developer within a few hours a very powerful frontend which can be embedded directly and seamless in SAP Sales and Service Cloud. After you finished the above tutorial, check this seperate git out to learn how to build a [custom frontend using AI](https://github.com/jens-limbach/SSv2-custom-frontend-ai) on top of our sample backend.
+
 ## Documentation
 
 - [How to build a custom service? (this tutorial)](https://github.com/jens-limbach/SSv2-custom-sample-object)

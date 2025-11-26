@@ -50,6 +50,10 @@
         {
           "host": "my1000265.vlab.crm.cloud.sap",
           "protocol": "https"
+        },
+        {
+          "host": "samplejl-ui-triumphant-possum-is.cfapps.eu10-004.hana.ondemand.com",
+          "protocol": "https"
         }
       ],
       "allowedHeaders": [

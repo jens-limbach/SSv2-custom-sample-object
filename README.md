@@ -27,6 +27,7 @@ If you want to see less CAP Development and more on how it looks later for the e
 - [Related Entities Feature](#related-entities-feature)
 - [Custom Frontend build with AI](#custom-frontend-build-with-ai)
 - [Documentation](#documentation)
+- [Extensions - Wanna Know More?](#-extensions---wanna-know-more)
 - [ToDos](#ToDos)
 
 ## Pre-requisites
@@ -1269,6 +1270,23 @@ Now we have a great generated frontend in our standard solution already but ofte
 - [General Extensibility of SAP Sales and Service Cloud](https://help.sap.com/docs/CX_NG_SALES/ea5ff8b9460a43cb8765a3c07d3421fe/90214e2fe20940dd8cd68c25742c4f9b.html)
 - [Jens' Extensibility Workshop for Beginners of Side-by-Side Extensiblity](https://github.com/jens-limbach/SSv2-extensibility-workshop)
 
+## 🚀 Extensions - Wanna Know More?
+
+Are you interested how you can extend SAP Sales and Service Cloud Version 2? I cover each recommended possibility from in-app to pro-code in my videos and hands-on tutorials!
+
+The videos show you step-by-step how to do it and not only the "finished" extensions and the tutorials complement those by giving you each single step in order to try it out yourself or to use it for a hands-on workshop! All you need is the curiosity to learn something new 😊
+
+### Topics:
+
+- **Basic customizing** ([Video 3m](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_wt8hh8ye))
+- **In-App Extensibility** ([Video 5m](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_w7vhb24g))
+- **Extensibility Workshop** ([Video 17m](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_52m7tuyh) | [Hands-On Tutorial](https://github.com/jens-limbach/SSv2-Workshop))
+  - First Side-by-Side app on BTP
+  - Custom Logic via a Microservice (trigger via Autoflow)
+  - Custom Key Metrics
+- **Building a Custom Object with standard frontend** ([Video 18m](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_j5slmbgc) | [Hands-On Tutorial](https://github.com/jens-limbach/SSv2-custom-sample-object))
+- **Building a custom frontend using AI** ([Video 15m](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_17l2ao1d) | [Hands-On Tutorial](https://github.com/jens-limbach/SSv2-custom-frontend-ai))
+
 ## Todos
 
 Planned Todo's for this Tutorial:
@@ -1277,7 +1295,5 @@ Planned Todo's for this Tutorial:
 - Add the related entity and document flow topics
 - Add a service for "custom key metrics"
 - Add example for multiple error messages including warnings and info messages
-- Add an example of a custom UI to create samples from opportunity to this tutorial
-- Add a custom UI as mashup in the sample UI (like some charts)
 - Add more explanations around the connections in package.json and the cloud sdk
 - Add few more screenshots to certain sections

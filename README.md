@@ -1,3 +1,7 @@
+📚 **Tutorial Series:** **Part 1: Building a Custom Object** (You are here) | [Part 2: Custom Frontend with AI](https://github.com/jens-limbach/SSv2-custom-frontend-ai) → Next
+
+---
+
 # Custom Services - Step by Step
 
 This is a step by step instruction how to create a complete custom services including value selectors and a custom UI.

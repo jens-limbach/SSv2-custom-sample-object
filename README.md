@@ -25,6 +25,7 @@ If you want to see less CAP Development and more on how it looks later for the e
 - [Business Logic](#business-logic)
 - [Timeline Feature](#timeline-feature)
 - [Related Entities Feature](#related-entities-feature)
+- [Custom Frontend build with AI](#custom-frontend-build-with-ai)
 - [Documentation](#documentation)
 - [ToDos](#ToDos)
 
@@ -1242,7 +1243,8 @@ Let's also add some more business logic. Until now we only had logic that is req
   });
 ```
 
-## Related Entities Feature (Preview - not yet released)
+## Related Entities Feature
+(Preview - not yet fully released)
 
 It is possible to link your custom object as a successor or predecessor to your standard objects. This is only a simple configuration and then they will appear as linkable in your standard object under the "Related Entity" section. See screenshots below.
 

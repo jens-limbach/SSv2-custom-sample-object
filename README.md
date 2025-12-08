@@ -1307,3 +1307,4 @@ Planned Todo's for this Tutorial:
 - Add example for multiple error messages including warnings and info messages
 - Add more explanations around the connections in package.json and the cloud sdk
 - Add few more screenshots to certain sections
+- Add code for generating the displayId

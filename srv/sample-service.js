@@ -19,6 +19,7 @@ module.exports = cds.service.impl(async function () {
 
     const scalarFields = [
       "id",
+      "displayId",
       "createdAt",
       "createdBy",
       "modifiedAt",
@@ -89,6 +90,7 @@ module.exports = cds.service.impl(async function () {
           .where({ id: result.id })
           .columns([
             "id",
+            "displayId",
             "createdAt",
             "createdBy",
             "modifiedAt",

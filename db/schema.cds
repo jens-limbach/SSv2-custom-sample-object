@@ -6,6 +6,8 @@ using {managed} from '@sap/cds/common';
 entity Sample : managed {
     key id                : UUID;
 
+        displayId         : String(20);
+
         @description
         sampleName        : String(255); // Descrptive name of the sample
         sampleType        : SampleCodeType; // Sample Type: Select List

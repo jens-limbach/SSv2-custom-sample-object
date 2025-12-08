@@ -30,6 +30,18 @@
           "sortable": false
         },
         {
+          "name": "displayId",
+          "label": "display Id",
+          "dataType": "STRING",
+          "dataFormat": "STRING",
+          "nullable": true,
+          "creatable": true,
+          "updatable": true,
+          "filterable": true,
+          "searchable": false,
+          "sortable": false
+        },
+        {
           "name": "sampleName",
           "label": "sample Name",
           "description": true,

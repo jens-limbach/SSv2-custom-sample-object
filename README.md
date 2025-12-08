@@ -79,6 +79,8 @@ using {managed} from '@sap/cds/common';
 entity Sample : managed {
     key id                : UUID;
 
+        displayId         : String(20);
+
         @description
         sampleName        : String(255); // Descrptive name of the sample
         sampleType        : SampleCodeType; // Sample Type: Select List
@@ -374,6 +376,7 @@ module.exports = cds.service.impl(async function () {
 
     const scalarFields = [
       "id",
+      "displayId",
       "createdAt",
       "createdBy",
       "modifiedAt",
@@ -444,6 +447,7 @@ module.exports = cds.service.impl(async function () {
           .where({ id: result.id })
           .columns([
             "id",
+            "displayId",
             "createdAt",
             "createdBy",
             "modifiedAt",

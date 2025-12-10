@@ -36,8 +36,7 @@ If you want to see less CAP Development and more on how it looks later for the e
 
 ## Pre-requisites
 
-- You have a BTP sub-account and access to Cloud Foundry.
-*Warning: SAP temporarly disabled cloud foundry deployments on <a href="https://account.hanatrial.ondemand.com/" target="_blank">BTP Trials</a> which means you need a proper BTP sub-account at the moment.*
+- You have a BTP sub-account and access to Cloud Foundry. You can use the free <a href="https://account.hanatrial.ondemand.com/" target="_blank">BTP Trial</a>.
 - You have setup a Hana Cloud on your BTP Sub-Account (take a look [here](https://github.com/jens-limbach/SSv2-extensibility-workshop/blob/main/hana-setup.md) for the basic steps needed)
 - You have installed VSCode and done the <a href="https://cap.cloud.sap/docs/get-started/#prerequisites" target="_blank">initial setup for CAP</a> (Node.js installed and cds tool kit installed via ```npm add -g @sap/cds-dk```)
 - You have access to the Custom Services feature for creating new entities in your SAP Sales and Service Cloud V2
